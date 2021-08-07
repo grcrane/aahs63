@@ -1,8 +1,7 @@
 ---- Sample header links
 
-<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/grcrane/aahs63@1ea9b6a/aahs63.js"></script>
-
-<link rel='stylesheet' href="https://cdn.jsdelivr.net/gh/grcrane/aahs63@6bf3a57/styles.min.css" />
+<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/grcrane/aahs63@b2ac924/aahs63.js"></script>
+<link rel='stylesheet' href="https://cdn.jsdelivr.net/gh/grcrane/aahs63@b2ac924/style.min.css" />
 
 ---- Sample html 
 
