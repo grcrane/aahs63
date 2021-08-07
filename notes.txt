@@ -1,0 +1,103 @@
+---- Sample header links
+
+<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/grcrane/aahs63@1ea9b6a/aahs63.js"></script>
+
+<link rel='stylesheet' href="https://cdn.jsdelivr.net/gh/grcrane/aahs63@6bf3a57/styles.min.css" />
+
+---- Sample html 
+
+<script>
+jQuery(document).ready(function() {
+  do_classList();   
+});
+</script>
+
+<div id="classList">
+   <div class="gallery-container">
+      <div class="title">
+         <h2>AAHS Class of '63</h2>
+         <div class="helpLocate"><a href="#">Help Us Locate Someone</a></div>
+      </div>
+      <div id="searchBoxes">
+         <div class="searchBox">
+            Items: 
+            <select name="classmateItems" id="classmateItems">
+               <option value="10">10</option>
+               <option value="20">20</option>
+               <option value="50">50</option>
+            </select>
+         </div>
+         <div class="searchBox">
+            Search: <input type="text" id="search">
+         </div>
+         <div class="searchBox">
+            <label for="classmateType">Type:</label>
+            <select name="classmateType" id="classmateType">
+               <option value="">Any</option>
+               <option value="classmate">Classmate</option>
+               <option value="staff">Staff</option>
+            </select>
+         </div>
+         <div class="searchBox">
+            Status: 
+            <select name="classmateStatus" id="classmateStatus">
+               <option value="">Any</option>
+               <option value="passed">Passed</option>
+               <option value="found">Found</option>
+               <option value="missing">Missing</option>
+               <option value="profile">Has Profile</option>
+            </select>
+         </div>
+         <div class="searchBox">
+         </div>
+      </div>
+      <p id="found"><span class="count"></span><a href="#" id="resetValues">(Clear)</a></p>
+      <div class="text-center">
+         <div class="pagination-holder clearfix">
+            <div class="light-pagination pagination light-theme simple-pagination">
+            </div>
+         </div>
+      </div>
+      <div class="gallery-items"></div>
+      <p>
+      <div class="text-center">
+         <div class="pagination-holder clearfix">
+            <div class="light-pagination pagination light-theme simple-pagination">
+            </div>
+         </div>
+      </div>
+   </div>
+   <div id="classmateInfo">
+      <button class="backButton" type="button">Return to classmate list</button>
+      <header class="entry-header">
+         <h1 class="entry-title classmateTitle">Brayl, Jim<sup>**</sup></h1>
+      </header>
+      <div id="idImage" style="float:left;margin-right: 10px;">
+         <img alt="" title="Brayl, Jim" class="idPhotoImage" src="https://www.aahs63.com/wp-content/uploads/2014/06/143-Brayl-Jim-1.jpg">
+      </div>
+      <div class="classmateContent">
+         classmate content
+      </div>
+      <p class="status"></p>
+      <div style="clear:both;"></div>
+   </div>
+   <div id="locateInfo">
+      <button class="backButton" type="button">Return to classmate list</button>
+      <div class="title">
+         <h2>Help Us Locate Your Classmates</h2>
+      </div>
+      <p>
+         The Class of '63 Reunion Committee is constantly trying to keep up with informaton 
+         about classmates.  Sadly, with over 700 classmates we have lost track of quite a few.
+         Some have changed emails, moved, change phone numbers or unfortunately passed away.  
+      <p>We could really use your help.  If you see someone you personally know, or have some information about then please, please pass it along to us.
+      <p>We will eventually have a handy on-line form for you, but in the mean time, please send us comments and information via email to <a style="text-decoration:underline;" href="mailto:aahs63@aahs.com">aahs63@aahs.com</a>. 
+      <div style="width:80%;text-align:center;margin: 0 auto;">
+         <br>
+         <div style="font-weight:bold;">Your AAHS ’63 Reunion Committee:</div>
+         <br>George Crane, Barbara (Stanley) Kramer, Butch Larkins, Carol (Schonberger) Spears, Rick Weid, Chuck Wilkins
+         </p>
+         <div style="clear:both;"></div>
+      </div>
+   </div>
+</div>

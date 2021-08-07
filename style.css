@@ -1,0 +1,224 @@
+/* ------------------------------------------------------ */
+/* AAHS 63 Class List                                     */
+/* George Crane, August 2021                              */
+/* ------------------------------------------------------ */
+
+* {
+    box-sizing: border-box;
+}
+body {
+    line-height: 1;
+}
+#classList .gallery-container, #classmateInfo {
+  width: 100%;
+  margin: 0 auto;
+    
+}
+#classList .text-center {
+  text-align:  center;
+}
+#classList div.gallery-items {
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 20px;
+  justify-content: center;
+
+}
+#classList div.gallery-items .item {
+  position: relative; 
+  width: 150px;
+  height: 200px;
+  margin: 0 10px 40px;
+}
+#classList div.gallery-items .item img {
+  object-fit: cover;
+  width: 150px;
+  height: 200px;
+
+}
+#classList div.gallery-items div.caption {
+  position: absolute;
+  top: 200px;
+  left: 0;
+}
+#classList .gallery-container .pagination{
+  width: 100%;
+  float: left;
+  padding:15px;
+  text-align: center;
+}
+#classList .gallery-container .pagination-holder {
+  display: inline-block;
+}
+#classList .gallery-container .pagination div{
+  display: inline-block;
+  margin:0 10px;
+}
+#classList .gallery-container .pagination .page{
+  color:gray;
+}
+#classList .gallery .pagination .prev,.gallery .pagination .next{
+ color:#000;
+ border:1px solid #000;
+ font-size:15px;
+ padding:7px 15px;
+ cursor: pointer;
+}
+
+#classList .gallery-container .pagination .prev.disabled,
+#classList .gallery-container .pagination .next.disabled{
+  border-color: gray;
+  color:gray;
+  pointer-events: none;
+}
+
+#classList #search {
+  margin-bottom: 10px;
+  max-width: 150px;
+  padding:  0;
+}
+
+#classList #searchBoxes {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-content: space-between;
+}
+
+#classList #searchBoxes .searchBox {
+  margin: 5px 10px;
+  white-space: nowrap;
+}
+
+
+
+#classList div.gallery-items div.item {
+  display: none;
+}
+#classList div.gallery-items div.item.filtered {
+  display: block;
+}
+
+#classList div.gallery-items div.item div.empty {
+    background: #eee;
+    width: 150px;
+    height: 200px;
+}
+
+#classList div.found {
+  display: inline-block;
+  margin-bottom:  0;
+}
+
+#classList div.title h2 {
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+#classList div#classmateInfo,
+#classList div#locateInfo {
+  display: none;
+}
+
+#classList p#found {
+  text-align: center;
+  margin-bottom:  0;
+}
+
+#classList #classmateInfo, #locateInfo {
+  border: 1px solid black;
+  padding: 10px;
+}
+
+#classList #classmateInfo p,
+#classList #locateInfo p {
+    margin-top: 0;
+    margin-bottom: 1rem;
+    font-size: 1.2rem;
+    font-weight: normal;
+    font-family: Calibri, Helvetica, Roboto, Arial, sans-serif;
+    color: #444;
+    font-size: 1.2rem;
+    line-height: 1.5em;
+}
+
+#classList .profileImg {
+  float: left;
+  margin: 10px;
+  width: 200px;
+  height: auto;
+}
+
+#classList .backButton {
+    margin: 0;
+    padding: 0.6em 1em;
+    border: none;
+    background: #e6e6e6;
+    color: black;
+    text-decoration: none;
+    font-size: .75rem;
+    line-size: 1rem;
+}
+
+#classList h1.entry-title {
+    color: #881728;
+    font-size: 25px;
+    font-weight: 400;
+    margin-bottom: 10px;
+    text-shadow: 1px 1px 0 #fff;
+    line-height: 130%;
+    margin-top: 0;
+}
+
+#classList sup {
+    position: relative;
+    vertical-align: baseline;
+    font-size: 75%;
+    line-height: 0;
+}
+
+#classList .idPhotoImage {
+    width: 150px;
+}
+#classList img {
+    max-width: 100%;
+    height: auto;
+}
+
+#classList .alignright {
+  float: right;
+}
+
+#classList #resetValues { 
+  display: none;
+  margin-left:  10px;
+}
+#classList #resetValues.show {
+  display:  inline-block;
+}
+
+#classList div.light-pagination .current {
+  padding: 0 7px;
+  margin: 0 5px 0 0;
+}
+
+#classList div.light-pagination {
+  margin-bottom:  0;
+}
+
+#classList .helpLocate {
+  text-align:  center;
+  margin-bottom:  10px;
+}
+#classList .helpLocate a {
+  text-decoration:  underline;
+}
+
+#classList p.status {
+  clear:  both;
+  text-transform: capitalize;
+}
+
+#classList .classmateContent p {
+  text-align: left;
+}
