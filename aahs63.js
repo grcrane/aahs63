@@ -19,7 +19,7 @@ writes to .gallery-container .gallery-items
 
 */
 
-var position = $(window).scrollTop(); 
+
 
 function get_spreadsheet(theurl) {
   var result = "";
@@ -161,6 +161,7 @@ function do_classmates(
 
 
 function do_classList() {
+  var position = $(window).scrollTop(); 
   var memberRows = []; 
   dataArray = do_classmates();
   var titles = []; 
