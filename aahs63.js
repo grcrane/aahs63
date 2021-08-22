@@ -94,7 +94,7 @@ function do_search() {
     if (classmateStatus && classmateStatus == 'profile') {
       str = str + '[data-profile="Y"]';
     }
-    if (classmateStatus && classmateStatus == 'passed ?') {
+    if (classmateStatus && classmateStatus == 'need') {
       str = str + '[data-need="Y"]';
     }
     var good_to_go = jQuery(str).addClass('showme');
