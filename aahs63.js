@@ -238,6 +238,16 @@ function do_classList() {
     var imgsrc = jQuery(this).find('img').attr('src');
     jQuery('#classmateInfo header h1').text(name);
     jQuery('p.status').text('Status: ' + status);
+    var needinfo = jQuery(this).parent().data("need");
+  
+    var obit = ''; 
+    if (memberRows[row]['c'][9] != null && memberRows[row]['c'][9].v != null) {
+      obit = memberRows[row]['c'][9].v;
+    }
+    var death = '';
+    if (memberRows[row]['c'][10] != null && memberRows[row]['c'][10].v != null) {
+      status = status + ' (' + memberRows[row]['c'][10].v  + ')';
+    }
 
     var img = '';
     if (memberRows[row]['c'][7] != null && memberRows[row]['c'][7].v != null) {
@@ -250,7 +260,8 @@ function do_classList() {
     }
     else {
         jQuery('.classmateContent').html('<p>No profile found</p>');
-      }   
+      } 
+    jQuery('p.status').text('Status: ' + status);  
     jQuery('#classmateInfo').show();
     jQuery('.gallery-container').hide(); 
     jQuery('#locateInfo').hide();   
