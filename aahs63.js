@@ -19,7 +19,7 @@ writes to .gallery-container .gallery-items
 
 */
 
-
+var position = jQuery(window).scrollTop(); 
 
 function get_spreadsheet(theurl) {
   var result = "";
@@ -161,7 +161,6 @@ function do_classmates(
 
 
 function do_classList() {
-
   var memberRows = []; 
   dataArray = do_classmates();
   var titles = []; 
@@ -271,7 +270,7 @@ function do_classList() {
       '<br>Obituary: <span>' + obit + '</span>'; 
       jQuery(temp).appendTo('p.status');
     }
-    position = $(window).scrollTop(); 
+    position = jQuery(window).scrollTop(); 
     jQuery('#classmateInfo').show();
     jQuery('.gallery-container').hide(); 
     jQuery('#locateInfo').hide();   
@@ -307,6 +306,3 @@ function do_classList() {
   var c = jQuery('.item.showme');
 
 } 
-$(document).ready(function() {
-  var position = $(window).scrollTop(); 
-})
