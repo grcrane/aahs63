@@ -267,6 +267,7 @@ function do_classList() {
       var temp = '<br>Date of death: ' + death + 
       '<br>Obituary: ' + obit; 
       jQuery(temp).appendTo('p.status');
+      console.log(temp);
     }
     jQuery('#classmateInfo').show();
     jQuery('.gallery-container').hide(); 
