@@ -95,7 +95,7 @@ function do_search() {
       str = str + '[data-profile="Y"]';
     }
     if (classmateStatus && classmateStatus == 'need') {
-      str = str + '[data-need="Y"]';
+      str = str + '[data-need="yes"]';
     }
     var good_to_go = jQuery(str).addClass('showme');
 
