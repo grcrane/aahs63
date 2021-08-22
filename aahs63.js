@@ -270,9 +270,11 @@ function do_classList() {
         jQuery('.classmateContent').html('<p>No profile found</p>');
       } 
     jQuery('p.status').text('Status: ' + status);  
+    var formurl = 'https://docs.google.com/forms/d/e/1FAIpQLSdG4w35Ip2u5-q9R7W8R5euIB4CJVqDHTrbIs8lxhx4Rq1jKA/viewform';
     if (status == 'passed') {
       var temp = '<br>Date of death: ' + death + 
-      '<br>Obituary: <span>' + obit + '</span>'; 
+      '<br>Obituary: <span>' + obit + '</span>' +
+      '<br>Help update, click <a href="' + formurl + '">here</a> if you have additional information.; 
       jQuery(temp).appendTo('p.status');
     }
     position = jQuery(window).scrollTop(); 
