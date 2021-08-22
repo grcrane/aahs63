@@ -263,11 +263,10 @@ function do_classList() {
         jQuery('.classmateContent').html('<p>No profile found</p>');
       } 
     jQuery('p.status').text('Status: ' + status);  
-    if (status == 'Passed') {
+    if (status == 'passed') {
       var temp = '<br>Date of death: ' + death + 
       '<br>Obituary: ' + obit; 
       jQuery(temp).appendTo('p.status');
-      console.log(temp);
     }
     jQuery('#classmateInfo').show();
     jQuery('.gallery-container').hide(); 
