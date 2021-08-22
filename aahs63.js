@@ -161,7 +161,7 @@ function do_classmates(
 
 
 function do_classList() {
-  var position = $(window).scrollTop(); 
+
   var memberRows = []; 
   dataArray = do_classmates();
   var titles = []; 
@@ -307,3 +307,6 @@ function do_classList() {
   var c = jQuery('.item.showme');
 
 } 
+$(document).ready(function() {
+  var position = $(window).scrollTop(); 
+})
