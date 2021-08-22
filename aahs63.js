@@ -274,7 +274,7 @@ function do_classList() {
     if (status == 'passed') {
       var temp = '<br>Date of death: ' + death + 
       '<br>Obituary: <span>' + obit + '</span>' +
-      '<br>Help update, click <a href="' + formurl + '">here</a> if you have additional information.; 
+      '<br>Help update, click <a href="' + formurl + '">here</a> if you have additional information.'; 
       jQuery(temp).appendTo('p.status');
     }
     position = jQuery(window).scrollTop(); 
