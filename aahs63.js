@@ -264,7 +264,8 @@ function do_classList() {
       } 
     jQuery('p.status').text('Status: ' + status);  
     if (status == 'passed') {
-      var temp = '<br>Date of death: ' + death + '<br>Obituary: ' + obit; 
+      var temp = '<br>Date of death: ' + death + 
+      '<br>Obituary: <span>' + obit + '</span>'; 
       jQuery(temp).appendTo('p.status');
     }
     jQuery('#classmateInfo').show();
