@@ -19,6 +19,8 @@ writes to .gallery-container .gallery-items
 
 */
 
+var position = $(window).scrollTop(); 
+
 function get_spreadsheet(theurl) {
   var result = "";
   jQuery.ajax({
@@ -268,6 +270,7 @@ function do_classList() {
       '<br>Obituary: <span>' + obit + '</span>'; 
       jQuery(temp).appendTo('p.status');
     }
+    position = $(window).scrollTop(); 
     jQuery('#classmateInfo').show();
     jQuery('.gallery-container').hide(); 
     jQuery('#locateInfo').hide();   
@@ -281,6 +284,7 @@ function do_classList() {
     jQuery('#classmateInfo').hide();
     jQuery('.gallery-container').show();
     jQuery('#locateInfo').hide(); 
+    $(window).scrollTop(position); 
     
   })
 
