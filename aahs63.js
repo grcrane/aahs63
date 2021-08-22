@@ -140,7 +140,7 @@ function do_classmates(
   var url = 'https://docs.google.com/spreadsheets/u/0/d/'
     + file_id + '/gviz/tq?headers=1&sheet=' + sheet 
     + '&tqx=out:json&headers=1&tq=' + 
-  escape("SELECT A, B, C, D, E, I, H, J, K, L");
+  escape("SELECT A, B, C, D, E, I, H, J, K, L, M, N");
   var spreadSheetLink = 'https://docs.google.com/spreadsheets/d/' 
     + file_id + '/edit';
   var classmateList = get_spreadsheet(url);
@@ -180,20 +180,29 @@ function do_classList() {
     var hasprofile = 'N';
     var thetype = 'classmate';
     var id = '';
+    var thepassed = ''; 
+    var theobit = ''; 
     var google = ''; 
+    var needinfo = 'no';
     if (item.c[9] != null && item.c[9].v != null) { google = item.c[9].v;}
     if (item.c[8] != null && item.c[8].v != null) { hasprofile = 'Y';}
     if (item.c[4] != null && item.c[4].v != null) { themarried = item.c[4].v;}
     if (item.c[6] != null && item.c[6].v != null) { thestatus = item.c[6].v;}
     if (item.c[5] != null && item.c[5].v != null) { thetype = item.c[5].v;}
     if (item.c[7] != null && item.c[7].v != null) { thesrc = item.c[7].v;}
+    if (item.c[8] != null && item.c[8].v != null) { thepassed = item.c[8].v;}
+    if (item.c[9] != null && item.c[9].v != null) { theobit = item.c[9].v;}
     if (item.c[0] != null && item.c[0].v != null) { id = item.c[0].v;}
     if (thesrc) {
       thesrc = 'https://www.grcrane2.com/aahs63_images/' +thesrc;
       //thesrc = 'https://drive.google.com/uc?export=view&id=' + google;
     }
+    if (thepassed.length < 5 || theobit = '') {
+      needinfo = 'yes';
+    }
     var out = '<a class="itemLink" href="#" data-row="' + key + '" data-id="' + id + '"><div class="item" data-profile="' + hasprofile + '" data-name="' + item.c[1].v + ', ' + item.c[2].v + " " + themarried +
-      '" data-type="' + thetype + '" data-status="' + thestatus.toLowerCase() + '" data-href="' + thesrc + '">\n';
+      '" data-type="' + thetype + '" data-status="' + thestatus.toLowerCase() + 
+      '" data-href="' + thesrc + '" data-need="' + needinfo + '">\n';
     if (key > maxItem ) {thesrc = '';} 
     if (thesrc) {
       out = out + '<img class="' + theclass + '"  src="' + thesrc + '" xalt="No image" /></a>\n';
