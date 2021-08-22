@@ -202,7 +202,7 @@ function do_classList() {
       thesrc = 'https://www.grcrane2.com/aahs63_images/' +thesrc;
       //thesrc = 'https://drive.google.com/uc?export=view&id=' + google;
     }
-    if (thestatus == 'passed') {
+    if (thestatus.toLowerCase() == 'passed') {
       if (thepassed.length < 5 || theobit == '') {
         needinfo = 'yes';
       }
