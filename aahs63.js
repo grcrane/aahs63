@@ -88,7 +88,7 @@ function do_search() {
     if (classmateType) {
       str = str + '[data-type="' + classmateType + '" i]';
     }
-    if (classmateStatus && classmateStatus != 'profile') {
+    if (classmateStatus && classmateStatus != 'profile' && classmateStatus != 'need') {
       str = str + '[data-status="' + classmateStatus + '" i]';
     }
     if (classmateStatus && classmateStatus == 'profile') {
