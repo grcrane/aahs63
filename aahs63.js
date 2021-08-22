@@ -202,8 +202,10 @@ function do_classList() {
       thesrc = 'https://www.grcrane2.com/aahs63_images/' +thesrc;
       //thesrc = 'https://drive.google.com/uc?export=view&id=' + google;
     }
-    if (thepassed.length < 5 || theobit == '') {
-      needinfo = 'yes';
+    if (thestatus == 'passed') {
+      if (thepassed.length < 5 || theobit == '') {
+        needinfo = 'yes';
+      }
     }
     var out = '<a class="itemLink" href="#" data-row="' + key + '" data-id="' + id + '"><div class="item" data-profile="' + hasprofile + '" data-name="' + item.c[1].v + ', ' + item.c[2].v + " " + themarried +
       '" data-type="' + thetype + '" data-status="' + thestatus.toLowerCase() + 
