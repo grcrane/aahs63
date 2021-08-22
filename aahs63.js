@@ -284,7 +284,7 @@ function do_classList() {
     jQuery('#classmateInfo').hide();
     jQuery('.gallery-container').show();
     jQuery('#locateInfo').hide(); 
-    $(window).scrollTop(position); 
+    jQuery(window).scrollTop(position); 
     
   })
 
