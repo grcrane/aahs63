@@ -145,7 +145,7 @@ function do_classmates(
   var url = 'https://docs.google.com/spreadsheets/u/0/d/'
     + file_id + '/gviz/tq?headers=1&sheet=' + sheet 
     + '&tqx=out:json&headers=1&tq=' + 
-  escape("SELECT A, B, C, D, E, I, H, J, K, L, M, N");
+  escape("SELECT A, B, C, D, E, I, H, J, K, L, M, N, O");
   var spreadSheetLink = 'https://docs.google.com/spreadsheets/d/' 
     + file_id + '/edit';
   var classmateList = get_spreadsheet(url);
@@ -188,6 +188,7 @@ function do_classList() {
     var thepassed = ''; 
     var theobit = ''; 
     var google = ''; 
+    var theimages = '';
     var needinfo = 'no';
     if (item.c[9] != null && item.c[9].v != null) { google = item.c[9].v;}
     if (item.c[8] != null && item.c[8].v != null) { hasprofile = 'Y';}
@@ -197,6 +198,7 @@ function do_classList() {
     if (item.c[7] != null && item.c[7].v != null) { thesrc = item.c[7].v;}
     if (item.c[8] != null && item.c[8].v != null) { thepassed = item.c[8].v;}
     if (item.c[9] != null && item.c[9].v != null) { theobit = item.c[9].v;}
+    if (item.c[12] != null && item.c[12].v != null) { theimages = item.c[12].v;}
     if (item.c[0] != null && item.c[0].v != null) { id = item.c[0].v;}
     if (thesrc) {
       thesrc = 'https://www.grcrane2.com/aahs63_images/' +thesrc;
@@ -274,10 +276,13 @@ function do_classList() {
       '?usp=pp_url&entry.1389452980=' + name;
     if (status == 'passed') {
       var temp = '<br>Date of death: ' + death + 
-      '<br>Obituary: <span>' + obit + '</span>' +
-      '<br>Help update, click <a href="' + formurl + '" target="_blank">here</a> if you have additional information.'; 
+      '<br>Obituary: <span>' + obit + '</span>';
       jQuery(temp).appendTo('p.status');
     }
+    temp = '<br>Help update, click <a href="' + formurl + '" target="_blank">here</a> if you have additional information.'; 
+    jQuery(temp).appendTo('p.status');
+    temp = '<br>the images=' + theimages;
+    jQuery(temp).appendTo('p.status');
     position = jQuery(window).scrollTop(); 
     jQuery('#classmateInfo').show();
     jQuery('.gallery-container').hide(); 
