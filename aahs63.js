@@ -283,7 +283,7 @@ function do_classList() {
     }
     temp = '<br>Help update, click <a href="' + formurl + '" target="_blank">here</a> if you have additional information.'; 
     jQuery(temp).appendTo('p.status');
-    temp = '<br>the images=' + theimages;
+    temp = '<div class="theImages"><br>the images=' + theimages + '</div>';
     console.log('temp=' + temp);
     jQuery(temp).appendTo('p.status');
     position = jQuery(window).scrollTop(); 
