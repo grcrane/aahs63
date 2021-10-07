@@ -285,13 +285,16 @@ function do_classList() {
     jQuery(temp).appendTo('p.status');
 
     jQuery('div.imageThumbBox').remove(); 
-    temp = "<div class=\"imageThumbBox\">\n" +
-    "<div class=\"imageThumbs\">\n";
 
-    temp = temp + '<br>the images=' + theimages;
+    if (theimages) {
+      temp = "<div class=\"imageThumbBox\">\n" +
+      "<div class=\"imageThumbs\">\n";
 
-    temp = temp+ "</div></div>\n" +
-    "<div style=\"clear:both;\"></div>\n";
+      temp = temp + '<img src="https://via.placeholder.com/"';
+
+      temp = temp+ "</div></div>\n" +
+      "<div style=\"clear:both;\"></div>\n";
+    }
 
     jQuery(temp).insertAfter('p.status');
     position = jQuery(window).scrollTop(); 
