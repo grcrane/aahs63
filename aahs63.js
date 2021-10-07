@@ -292,7 +292,7 @@ function do_classList() {
 
     temp = temp + '<div class="theImages"><br>the images=' + theimages + '</div>';
     console.log('temp=' + temp);
-    jQuery(temp).appendTo('.classmateContent');
+    jQuery(temp)..insertAfter('p.status');
     position = jQuery(window).scrollTop(); 
     jQuery('#classmateInfo').show();
     jQuery('.gallery-container').hide(); 
