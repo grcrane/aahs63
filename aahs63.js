@@ -246,7 +246,7 @@ function do_classList() {
     var status = jQuery(this).parent().data("status");
     var name = jQuery(this).parent().find('div.caption').text();
     var imgsrc = jQuery(this).find('img').attr('src');
-    var theimages = jQuery(this).parent().data("images");;
+    var theimages = jQuery(this).parent().data("images");
     jQuery('#classmateInfo header h1').text(name);
     jQuery('p.status').text('Status: ' + status);
     var needinfo = jQuery(this).parent().data("need");
@@ -284,6 +284,7 @@ function do_classList() {
     temp = '<br>Help update, click <a href="' + formurl + '" target="_blank">here</a> if you have additional information.'; 
     jQuery(temp).appendTo('p.status');
 
+    jQuery('div.imageThumbBox').remove(); 
     temp = "<div class=\"imageThumbBox\">\n" +
     "<div class=\"imageThumbs\">\n";
 
