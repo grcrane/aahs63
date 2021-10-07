@@ -285,13 +285,13 @@ function do_classList() {
     jQuery(temp).appendTo('p.status');
 
     temp = "<div class=\"imageThumbBox\">\n" +
-    "<div class=\"imageThumbs\">\n" +
-    "</div></div>\n" +
+    "<div class=\"imageThumbs\">\n";
+
+    temp = temp + '<br>the images=' + theimages;
+
+    temp = tem p+ "</div></div>\n" +
     "<div style=\"clear:both;\"></div>\n";
 
-
-    temp = temp + '<div class="theImages"><br>the images=' + theimages + '</div>';
-    console.log('temp=' + temp);
     jQuery(temp).insertAfter('p.status');
     position = jQuery(window).scrollTop(); 
     jQuery('#classmateInfo').show();
