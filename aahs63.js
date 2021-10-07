@@ -290,7 +290,7 @@ function do_classList() {
       temp = "<div class=\"imageThumbBox\">\n" +
       "<div class=\"imageThumbs\">\n";
 
-      temp = temp + '<img src="https://via.placeholder.com/150?text="' + 
+      temp = temp + '<img src="https://via.placeholder.com/150?text=' + 
         theimages + '">';
 
       temp = temp+ "</div></div>\n" +
