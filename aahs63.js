@@ -289,7 +289,7 @@ function do_classList() {
 
     temp = temp + '<br>the images=' + theimages;
 
-    temp = tem p+ "</div></div>\n" +
+    temp = temp+ "</div></div>\n" +
     "<div style=\"clear:both;\"></div>\n";
 
     jQuery(temp).insertAfter('p.status');
