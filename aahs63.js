@@ -290,7 +290,7 @@ function do_classList() {
     "<div style=\"clear:both;\"></div>\n";
 
 
-    temp .= '<div class="theImages"><br>the images=' + theimages + '</div>';
+    temp = temp + '<div class="theImages"><br>the images=' + theimages + '</div>';
     console.log('temp=' + temp);
     jQuery(temp).appendTo('.classmateContent');
     position = jQuery(window).scrollTop(); 
