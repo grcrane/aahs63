@@ -283,9 +283,16 @@ function do_classList() {
     }
     temp = '<br>Help update, click <a href="' + formurl + '" target="_blank">here</a> if you have additional information.'; 
     jQuery(temp).appendTo('p.status');
-    temp = '<div class="theImages"><br>the images=' + theimages + '</div>';
+
+    temp = "<div class=\"imageThumbBox\">\n" +
+    "<div class=\"imageThumbs\">\n" +
+    "</div></div>\n" +
+    "<div style=\"clear:both;\"></div>\n";
+
+
+    temp .= '<div class="theImages"><br>the images=' + theimages + '</div>';
     console.log('temp=' + temp);
-    jQuery(temp).appendTo('p.status');
+    jQuery(temp).appendTo('.classmateContent');
     position = jQuery(window).scrollTop(); 
     jQuery('#classmateInfo').show();
     jQuery('.gallery-container').hide(); 
