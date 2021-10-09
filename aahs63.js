@@ -31,7 +31,7 @@ function get_spreadsheet(theurl) {
       dataType: 'text',
       async: false,
       tryCount: 0,
-      retryLimit: 3,
+      retryLimit: 7,
       success: function(data) {
           i = data.indexOf('(');
           j = data.lastIndexOf(')');
