@@ -11,15 +11,18 @@ jQuery(document).ready(function() {
 
 writes to .gallery-container .gallery-items
 
-<div id="classList">					
-	<div class="gallery-container">
-		<div class="gallery-items"></div>
-	</div>
+<div id="classList">          
+  <div class="gallery-container">
+    <div class="gallery-items"></div>
+  </div>
 </div>
 
 */
 
 var position = jQuery(window).scrollTop(); 
+
+var imageArray = []; 
+var imageRows = []; 
 
 function get_spreadsheet(theurl) {
   var result = "";
@@ -145,10 +148,11 @@ function do_classmates(
   var url = 'https://docs.google.com/spreadsheets/u/0/d/'
     + file_id + '/gviz/tq?headers=1&sheet=' + sheet 
     + '&tqx=out:json&headers=1&tq=' + 
-  escape("SELECT A, B, C, D, E, I, H, J, K, L, M, N, O");
+  escape("SELECT A, B, C, D, E, I, H, J, K, L, M, N, O ORDER BY B, C");
   var spreadSheetLink = 'https://docs.google.com/spreadsheets/d/' 
     + file_id + '/edit';
   var classmateList = get_spreadsheet(url);
+ // alert(url);
   var temp = '<a href="' + url.replace('out:json','out:html') + '" target="_blank">url</a>';
   jQuery('#url').html(temp);
   // Test for some error conditions 
@@ -190,7 +194,7 @@ function do_classList() {
     var google = ''; 
     var theimages = '';
     var needinfo = 'no';
-    if (item.c[9] != null && item.c[9].v != null) { google = item.c[9].v;}
+    if (item.c[11] != null && item.c[11].v != null) { google = item.c[11].v;}
     if (item.c[8] != null && item.c[8].v != null) { hasprofile = 'Y';}
     if (item.c[4] != null && item.c[4].v != null) { themarried = item.c[4].v;}
     if (item.c[6] != null && item.c[6].v != null) { thestatus = item.c[6].v;}
@@ -201,8 +205,8 @@ function do_classList() {
     if (item.c[12] != null && item.c[12].v != null) { theimages = item.c[12].v;}
     if (item.c[0] != null && item.c[0].v != null) { id = item.c[0].v;}
     if (thesrc) {
-      thesrc = 'https://www.grcrane2.com/aahs63_images/' +thesrc;
-      //thesrc = 'https://drive.google.com/uc?export=view&id=' + google;
+      //thesrc = 'https://www.grcrane2.com/aahs63_images/' +thesrc;
+      thesrc = 'https://drive.google.com/uc?export=view&id=' + google;
     }
     if (thestatus.toLowerCase() == 'passed') {
       if (thepassed.length < 5 || theobit == '') {
@@ -240,7 +244,32 @@ function do_classList() {
   })
 
   jQuery('.itemLink').on('click', function (event) {
-    event.preventDefault(); 
+  event.preventDefault(); 
+
+  /*
+  select a.id, a.post_title, b.meta_value gallery from wp_posts a 
+left join wp_postmeta b on a.id = b.post_id and b.meta_key = '_classmate_photos'
+where post_type = 'classmates' and post_status = 'publish'
+and b.meta_value is not null and b.meta_value != ''
+*/
+
+  /* Go get the list of images and links
+    if this is the first time we have looked for one */
+  if (!imageRows.length) {
+    file_id = '1EDNx6F1ywhoEsnNS2DSSyBkgNphoQEnmccFS3gOZ5PU';
+    sheet = 'Allimages';
+    var url = 'https://docs.google.com/spreadsheets/u/0/d/'
+    + file_id + '/gviz/tq?headers=1&sheet=' + sheet 
+    + '&tqx=out:json&headers=1&tq=' + 
+    escape("SELECT A, B, C, D");
+    var spreadSheetLink = 'https://docs.google.com/spreadsheets/d/' 
+    + file_id + '/edit';
+    var allImages = get_spreadsheet(url);
+    console.log(allImages);
+    imageRows = allImages.table.rows;
+  }
+  console.log(memberRows[row]);
+
     var id = jQuery(this).data("id");
     var row = jQuery(this).data("row");
     var status = jQuery(this).parent().data("status");
@@ -250,7 +279,7 @@ function do_classList() {
     jQuery('#classmateInfo header h1').text(name);
     jQuery('p.status').text('Status: ' + status);
     var needinfo = jQuery(this).parent().data("need");
-  
+
     var obit = 'Missing'; 
     if (memberRows[row]['c'][9] != null && memberRows[row]['c'][9].v != null) {
       obit = '<a href="' + memberRows[row]['c'][9].v + '" target="_blank">' +
@@ -276,22 +305,41 @@ function do_classList() {
     jQuery('p.status').text('Status: ' + status);  
     var formurl = 'https://docs.google.com/forms/d/e/1FAIpQLSdG4w35Ip2u5-q9R7W8R5euIB4CJVqDHTrbIs8lxhx4Rq1jKA/viewform' +
       '?usp=pp_url&entry.1389452980=' + name;
+    var temp = '';
     if (status == 'passed') {
-      var temp = '<br>Date of death: ' + death + 
+      temp = '<br>Date of death: ' + death + 
       '<br>Obituary: <span>' + obit + '</span>';
       jQuery(temp).appendTo('p.status');
+      temp = ''; 
     }
-    temp = '<br>Help update, click <a href="' + formurl + '" target="_blank">here</a> if you have additional information.'; 
+    temp = temp + '<div class="updateHelp">Help update, click <a href="' + formurl + '" target="_blank">here</a> if you have additional information.</div>'; 
     jQuery(temp).appendTo('p.status');
 
     jQuery('div.imageThumbBox').remove(); 
 
+    temp = ''; 
     if (theimages) {
       temp = "<div class=\"imageThumbBox\">\n" +
       "<div class=\"imageThumbs\">\n";
+      theimages = theimages.toString();
+      var splitimages = theimages.split(":");
 
-      temp = temp + '<img src="https://via.placeholder.com/150?text=' + 
-        theimages + '">';
+      splitimages.forEach(function(item,key) {
+
+       var thesrc = 'https://via.placeholder.com/150?text=' + item;
+        imageRows.forEach(function(xitem, key) { 
+         if (xitem.c[0].v == item.toString()) {
+            if (xitem.c[2] != null && xitem.c[2].v != null) {
+              google = xitem.c[3].v;
+              //thesrc = 'https://www.grcrane2.com/aahs63_images/' + xitem.c[2].v;
+              thesrc = 'https://drive.google.com/uc?export=view&id=' + google;
+            }
+          }
+
+        })
+
+      temp = temp + '<img src="' + thesrc + '">';      
+      })
 
       temp = temp+ "</div></div>\n" +
       "<div style=\"clear:both;\"></div>\n";
