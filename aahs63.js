@@ -49,7 +49,8 @@ function get_spreadsheet(theurl) {
           }
           return;
         }
-        alert("Status: " + textStatus); alert("Error: " + errorThrown); 
+        //alert("Status: " + textStatus); 
+        alert("Error: " + errorThrown + " try refreshing the page."); 
       } 
   });
   return result;
