@@ -165,7 +165,7 @@ function do_classmates(
   var url = 'https://docs.google.com/spreadsheets/u/0/d/'
     + file_id + '/gviz/tq?headers=1&sheet=' + sheet 
     + '&tqx=out:json&headers=1&tq=' + 
-  escape("SELECT A, B, C, D, E, I, H, J, K, L, M, N, O ORDER BY B, C");
+  escape("SELECT A, B, C, D, E, I, H, J, K, L, M, N, O");
   var spreadSheetLink = 'https://docs.google.com/spreadsheets/d/' 
     + file_id + '/edit';
   var classmateList = get_spreadsheet(url);
