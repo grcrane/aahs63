@@ -254,3 +254,43 @@ body {
 #classList .classmateContent p {
   text-align: left;
 }
+
+div#classmateInfo p.status div.updateHelp {
+   margin-top:  10px; 
+}
+
+div#classmateInfo div.imageThumbs {
+   display: flex;
+   flex-wrap: wrap;
+   padding: 0;
+   width: 100%;
+   margin: 0 auto;
+   margin-left: auto;
+   margin-right: auto;
+   justify-content:  left;
+}
+
+
+
+div#classmateInfo div.imageThumbBox {
+   width:  100%;
+   margin:  0 auto;
+}
+
+div#classmateInfo div.imageThumbs img {
+   margin:  5px;
+   width:  200px;
+   height:  auto; 
+   background:  white;
+   object-fit:  cover;
+}
+div.classmateConten div.imageThumbs img.active {
+   border: 3px solid red;
+}
+
+div#classmateInfo header {
+    display:  block;
+    border: none;
+    margin: 0;
+    padding: 0;
+}
