@@ -30,7 +30,8 @@ function get_spreadsheet(theurl) {
       url: theurl,
       dataType: 'text',
       async: false,
-      timeout: 60000, 
+      tryCount: 0,
+      retryLimit: 3,
       success: function(data) {
           i = data.indexOf('(');
           j = data.lastIndexOf(')');
@@ -39,6 +40,15 @@ function get_spreadsheet(theurl) {
           result = data;
       },
       error: function(XMLHttpRequest, textStatus, errorThrown) { 
+        if (textStatus == 'timeout') {
+          this.tryCount++;
+          if (this.tryCount <= this.retryLimit) {
+            // try agian
+            jQuery.ajax(this);
+            return;
+          }
+          return;
+        }
         alert("Status: " + textStatus); alert("Error: " + errorThrown); 
       } 
   });
@@ -342,7 +352,7 @@ and b.meta_value is not null and b.meta_value != ''
 
         })
 
-      temp = temp + '<img src="' + thesrc + '">';      
+      temp = temp + '<a href="' + thesrc + '"><img src="' + thesrc + '"></a>';      
       })
 
       temp = temp+ "</div></div>\n" +
