@@ -30,14 +30,17 @@ function get_spreadsheet(theurl) {
       url: theurl,
       dataType: 'text',
       async: false,
-      timeout: 0, 
+      timeout: 60000, 
       success: function(data) {
           i = data.indexOf('(');
           j = data.lastIndexOf(')');
           data = data.substr(i + 1, j - 1 - i);
           var data = JSON.parse(data);
           result = data;
-      }
+      },
+      error: function(XMLHttpRequest, textStatus, errorThrown) { 
+        alert("Status: " + textStatus); alert("Error: " + errorThrown); 
+      } 
   });
   return result;
 }
