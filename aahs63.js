@@ -51,6 +51,8 @@ function get_spreadsheet(theurl) {
         }
         //alert("Status: " + textStatus); 
         alert("Error: " + errorThrown + " try refreshing the page."); 
+        console.log('Error: + errorThrown');
+        console.log(theurl);
       } 
   });
   return result;
