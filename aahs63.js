@@ -17,22 +17,27 @@ writes to .gallery-container .gallery-items
   </div>
 </div>
 
+https://dmitripavlutin.com/javascript-fetch-async-await/
+
 */
 
-// Get the classmates data
-var file_id ="1RtXQ2sO42sW-3SInyNIjO_lUr_2pfJrWCr8xM0jNp3I";
-var sheet = "Classmates";
-var classmatesurl = 'https://docs.google.com/spreadsheets/u/0/d/'
+function formatURL(file_id, sheet, query) {
+  var temp = 'https://docs.google.com/spreadsheets/u/0/d/'
   + file_id + '/gviz/tq?headers=1&sheet=' + sheet 
   + '&tqx=out:json&headers=1&tq=' + 
-  escape("SELECT A, B, C, D, E, I, H, J, K, L, M, N, O ORDER BY B, C");
+  escape(query);
+  return temp; 
+}
+
+var file_id ="1RtXQ2sO42sW-3SInyNIjO_lUr_2pfJrWCr8xM0jNp3I";
+var sheet = "Classmates";
+var query = "SELECT A, B, C, D, E, I, H, J, K, L, M, N, O ORDER BY B, C";
+var classmatesurl = formatURL(file_id, sheet, query);
 
 file_id = '1EDNx6F1ywhoEsnNS2DSSyBkgNphoQEnmccFS3gOZ5PU';
 sheet = 'Allimages';
-var imagesurl = 'https://docs.google.com/spreadsheets/u/0/d/'
-  + file_id + '/gviz/tq?headers=1&sheet=' + sheet 
-  + '&tqx=out:json&headers=1&tq=' + 
-  escape("SELECT A, B, C, D");
+var query = "SELECT A, B, C, D";
+var imagessurl = formatURL(file_id, sheet, query);
 
 async function fetchData() { 
   const [classmatesResponse, imagesResponse] = await Promise.all([
@@ -44,6 +49,21 @@ async function fetchData() {
   var images = await imagesResponse.text();
   images = JSON.parse(images.substr(47).slice(0, -2))
   return [classmates, images];
+}
+
+
+async function fetchClassmates() {
+  const classmatesResponse = await fetch(classmatesurl);
+  var classmates = await classmatesResponse.text();
+  classmates = JSON.parse(classmates.substr(47).slice(0, -2))
+  return classmates;
+}
+
+async function fetchImages() {
+  const imagesResponse = await fetch(imagessurl);
+  var images = await imagesResponse.text();
+  images = JSON.parse(images.substr(47).slice(0, -2))
+  return images;
 }
 
 var position = jQuery(window).scrollTop(); 
@@ -149,9 +169,8 @@ function do_reset() {
 function do_classList() {
   var memberRows = []; 
 
-  fetchData().then(([dataArray, images]) => {
-    dataArray;     // fetched classmate list
-    images;         // fetched images list
+  fetchClassmates().then(dataArray => {
+    //dataArray;     // fetched classmate list
     // do everything here 
 
     var titles = []; 
@@ -238,7 +257,8 @@ function do_classList() {
       and b.meta_value is not null and b.meta_value != ''
       */
 
-      imageRows = images.table.rows;
+      //imageRows = images.table.rows;
+      imageRows = [];
       var id = jQuery(this).data("id");
       var row = jQuery(this).data("row");
       var status = jQuery(this).parent().data("status");
@@ -286,7 +306,19 @@ function do_classList() {
 
       jQuery('div.imageThumbBox').remove(); 
 
-      temp = ''; 
+      var temp = ''; 
+      theimages = ''; // temporary override
+
+      function showClassmateInfo() {
+        position = jQuery(window).scrollTop(); 
+        jQuery('#classmateInfo').show();
+        jQuery('.gallery-container').hide(); 
+        jQuery('#locateInfo').hide();   
+        var elmnt = document.getElementById("page");
+        elmnt.scrollIntoView(true); 
+      }
+
+        
       if (theimages) {
         temp = "<div class=\"imageThumbBox\">\n" +
         "<div class=\"imageThumbs\">\n";
@@ -312,16 +344,12 @@ function do_classList() {
 
         temp = temp+ "</div></div>\n" +
         "<div style=\"clear:both;\"></div>\n";
+        jQuery(temp).insertAfter('p.status');
+        showClassmateInfo(); 
+      }   
+      else {
+        showClassmateInfo(); 
       }
-
-      jQuery(temp).insertAfter('p.status');
-      position = jQuery(window).scrollTop(); 
-      jQuery('#classmateInfo').show();
-      jQuery('.gallery-container').hide(); 
-      jQuery('#locateInfo').hide();   
-      var elmnt = document.getElementById("page");
-      elmnt.scrollIntoView(true);     
-
     })
 
     jQuery('.backButton').on('click', function (event) {
