@@ -29,15 +29,15 @@ function formatURL(file_id, sheet, query) {
   return temp; 
 }
 
-var file_id ="1RtXQ2sO42sW-3SInyNIjO_lUr_2pfJrWCr8xM0jNp3I";
-var sheet = "Classmates";
+var classmatefile_id ="1RtXQ2sO42sW-3SInyNIjO_lUr_2pfJrWCr8xM0jNp3I";
+var classmatesheet = "Classmates";
 var query = "SELECT A, B, C, D, E, I, H, J, K, L, M, N, O ORDER BY B, C";
-var classmatesurl = formatURL(file_id, sheet, query);
+var classmatesurl = formatURL(classmatefile_id, classmatesheet, query);
 
-file_id = '1EDNx6F1ywhoEsnNS2DSSyBkgNphoQEnmccFS3gOZ5PU';
-sheet = 'Allimages';
-var query = "SELECT A, B, C, D";
-var imagessurl = formatURL(file_id, sheet, query);
+var image_file_id = '1EDNx6F1ywhoEsnNS2DSSyBkgNphoQEnmccFS3gOZ5PU';
+var image_sheet = 'Allimages';
+var imagequery = "SELECT A, B, C, D";
+var imagessurl = formatURL(image_file_id, image_sheet, imagequery);
 
 async function fetchData() { 
   const [classmatesResponse, imagesResponse] = await Promise.all([
@@ -52,15 +52,15 @@ async function fetchData() {
 }
 
 
-async function fetchClassmates() {
-  const classmatesResponse = await fetch(classmatesurl);
+async function fetchClassmates(url) {
+  const classmatesResponse = await fetch(url);
   var classmates = await classmatesResponse.text();
   classmates = JSON.parse(classmates.substr(47).slice(0, -2))
   return classmates;
 }
 
-async function fetchImages() {
-  const imagesResponse = await fetch(imagessurl);
+async function fetchImages(imagesurl) {
+  const imagesResponse = await fetch(imagesurl);
   var images = await imagesResponse.text();
   images = JSON.parse(images.substr(47).slice(0, -2))
   return images;
@@ -169,7 +169,7 @@ function do_reset() {
 function do_classList() {
   var memberRows = []; 
 
-  fetchClassmates().then(dataArray => {
+  fetchClassmates(classmatesurl).then(dataArray => {
     //dataArray;     // fetched classmate list
     // do everything here 
 
@@ -179,12 +179,12 @@ function do_classList() {
         titles.push({title: item})
     })
 
-    
     var maxItem = parseInt(jQuery("#classmateItems").val());
     
     // push data array
     var data = []; 
     memberRows = dataArray.table.rows;
+    delete(dataArray); // all done with this variable
     memberRows.forEach(function(item, key) { 
       var theclass = "";
       var thesrc = '';
@@ -247,6 +247,11 @@ function do_classList() {
       do_search();
     })
 
+    /* ----------------------------------------------------------- */
+    /* User clicked on one of the classmates.                      */
+    /* Switch to the detail block and fill in the information      */
+    /* ----------------------------------------------------------- */  
+
     jQuery('.itemLink').on('click', function (event) {
       event.preventDefault(); 
 
@@ -257,8 +262,6 @@ function do_classList() {
       and b.meta_value is not null and b.meta_value != ''
       */
 
-      //imageRows = images.table.rows;
-      imageRows = [];
       var id = jQuery(this).data("id");
       var row = jQuery(this).data("row");
       var status = jQuery(this).parent().data("status");
@@ -268,6 +271,7 @@ function do_classList() {
       jQuery('#classmateInfo header h1').text(name);
       jQuery('p.status').text('Status: ' + status);
       var needinfo = jQuery(this).parent().data("need");
+      jQuery('.classmateContent').text('');
 
       var obit = 'Missing'; 
       if (memberRows[row]['c'][9] != null && memberRows[row]['c'][9].v != null) {
@@ -285,12 +289,15 @@ function do_classList() {
 
       }
       jQuery('#idImage').html(img);
+
+      /*
       if (memberRows[row]['c'][8] != null && memberRows[row]['c'][8].v != null) {
         jQuery('.classmateContent').html(memberRows[row]['c'][8].v);
       }
       else {
           jQuery('.classmateContent').html('<p>No profile found</p>');
         } 
+      */
       jQuery('p.status').text('Status: ' + status);  
       var formurl = 'https://docs.google.com/forms/d/e/1FAIpQLSdG4w35Ip2u5-q9R7W8R5euIB4CJVqDHTrbIs8lxhx4Rq1jKA/viewform' +
         '?usp=pp_url&entry.1389452980=' + name;
@@ -307,7 +314,10 @@ function do_classList() {
       jQuery('div.imageThumbBox').remove(); 
 
       var temp = ''; 
-      theimages = ''; // temporary override
+
+      /* ----------------------------------------------------------- */
+      /* Show the classmates detail information                      */
+      /* ----------------------------------------------------------- */
 
       function showClassmateInfo() {
         position = jQuery(window).scrollTop(); 
@@ -317,39 +327,73 @@ function do_classList() {
         var elmnt = document.getElementById("page");
         elmnt.scrollIntoView(true); 
       }
+     
+      /* ----------------------------------------------------------- */
+      /* Get the classmates profile, if it exists.                   */
+      /* ----------------------------------------------------------- */
+      
+      var query = "SELECT A, K WHERE A = '" + id + "'";
+        var classmatesurl = formatURL(classmatefile_id, classmatesheet, query);
+        //alert(classmatesurl)
+        fetchClassmates(classmatesurl).then(dataArray => {
+          profiledata = dataArray.table.rows;
+          console.log(profiledata);
+          if (profiledata[0]['c'][1] != null && profiledata[0]['c'][1].v != null) {
+            jQuery('.classmateContent').html(profiledata[0]['c'][1].v);
+          }
+          else {
+            jQuery('.classmateContent').html('<p>No profile found</p>');
+          } 
+        });
 
-        
+      /* ----------------------------------------------------------- */
+      /* Get the classmates extra images                             */
+      /* ----------------------------------------------------------- */
+      
       if (theimages) {
-        temp = "<div class=\"imageThumbBox\">\n" +
-        "<div class=\"imageThumbs\">\n";
         theimages = theimages.toString();
         var splitimages = theimages.split(":");
-
-        splitimages.forEach(function(item,key) {
-
-         var thesrc = 'https://via.placeholder.com/150?text=' + item;
-          imageRows.forEach(function(xitem, key) { 
-           if (xitem.c[0].v == item.toString()) {
-              if (xitem.c[2] != null && xitem.c[2].v != null) {
-                google = xitem.c[3].v;
-                //thesrc = 'https://www.grcrane2.com/aahs63_images/' + xitem.c[2].v;
-                thesrc = 'https://drive.google.com/uc?export=view&id=' + google;
-              }
-            }
-
-          })
-
-        temp = temp + '<a href="' + thesrc + '"><img src="' + thesrc + '"></a>';      
+        var where = ' WHERE ';
+        var sep = '';
+        splitimages.forEach(function(item,key) { 
+          where += sep + " A='" + item + "'";
+          sep= ' OR '; 
         })
 
-        temp = temp+ "</div></div>\n" +
-        "<div style=\"clear:both;\"></div>\n";
-        jQuery(temp).insertAfter('p.status');
-        showClassmateInfo(); 
-      }   
-      else {
-        showClassmateInfo(); 
-      }
+        var query = "SELECT A, B, C, D " + where;
+        var imagesurl = formatURL(image_file_id, image_sheet, query);
+        fetchImages(imagesurl).then(imageArray => {
+          console.log(imageArray);
+          temp = "<div class=\"imageThumbBox\">\n" +
+          "<div class=\"imageThumbs\">\n";
+          
+          splitimages.forEach(function(item,key) {
+           var imageRows = imageArray.table.rows;
+           var thesrc = 'https://via.placeholder.com/150?text=' + item;
+            imageRows.forEach(function(xitem, key) { 
+             if (xitem.c[0].v == item.toString()) {
+                if (xitem.c[2] != null && xitem.c[2].v != null) {
+                  google = xitem.c[3].v;
+                  //thesrc = 'https://www.grcrane2.com/aahs63_images/' + xitem.c[2].v;
+                  thesrc = 'https://drive.google.com/uc?export=view&id=' + google;
+                }
+              }
+
+            })
+
+          temp = temp + '<a href="' + thesrc + '"><img src="' + thesrc + '"></a>';      
+          })
+
+          temp = temp+ "</div></div>\n" +
+          "<div style=\"clear:both;\"></div>\n";
+          jQuery(temp).insertAfter('p.status');
+          showClassmateInfo(); 
+          });
+        }   
+        else {
+          showClassmateInfo(); 
+        }
+        delete(memberRows);  // all done with this variable
     })
 
     jQuery('.backButton').on('click', function (event) {
