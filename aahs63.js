@@ -39,38 +39,14 @@ var image_sheet = 'Allimages';
 var imagequery = "SELECT A, B, C, D";
 var imagessurl = formatURL(image_file_id, image_sheet, imagequery);
 
-async function fetchData() { 
-  const [classmatesResponse, imagesResponse] = await Promise.all([
-    fetch(classmatesurl),
-    fetch(imagesurl)
-  ]);
-  var classmates = await classmatesResponse.text();
-  classmates = JSON.parse(classmates.substr(47).slice(0, -2))
-  var images = await imagesResponse.text();
-  images = JSON.parse(images.substr(47).slice(0, -2))
-  return [classmates, images];
-}
-
-
-async function fetchClassmates(url) {
-  const classmatesResponse = await fetch(url);
-  var classmates = await classmatesResponse.text();
-  classmates = JSON.parse(classmates.substr(47).slice(0, -2))
-  return classmates;
-}
-
-async function fetchImages(imagesurl) {
-  const imagesResponse = await fetch(imagesurl);
-  var images = await imagesResponse.text();
-  images = JSON.parse(images.substr(47).slice(0, -2))
-  return images;
+async function fetchGoogleData(url) {
+  const googleResponse = await fetch(url);
+  var data = await googleResponse.text();
+  data = JSON.parse(data.substr(47).slice(0, -2))
+  return data;
 }
 
 var position = jQuery(window).scrollTop(); 
-
-var imageArray = []; 
-var imageRows = []; 
-var dataArray = [];
 
 function do_page(page = 1) {
   var maxItem = parseInt(jQuery("#classmateItems").val());
@@ -169,7 +145,7 @@ function do_reset() {
 function do_classList() {
   var memberRows = []; 
 
-  fetchClassmates(classmatesurl).then(dataArray => {
+  fetchGoogleData(classmatesurl).then(dataArray => {
     //dataArray;     // fetched classmate list
     // do everything here 
 
@@ -335,7 +311,7 @@ function do_classList() {
       var query = "SELECT A, K WHERE A = '" + id + "'";
         var classmatesurl = formatURL(classmatefile_id, classmatesheet, query);
         //alert(classmatesurl)
-        fetchClassmates(classmatesurl).then(dataArray => {
+        fetchGoogleData(classmatesurl).then(dataArray => {
           profiledata = dataArray.table.rows;
           console.log(profiledata);
           if (profiledata[0]['c'][1] != null && profiledata[0]['c'][1].v != null) {
@@ -362,7 +338,7 @@ function do_classList() {
 
         var query = "SELECT A, B, C, D " + where;
         var imagesurl = formatURL(image_file_id, image_sheet, query);
-        fetchImages(imagesurl).then(imageArray => {
+        fetchGoogleData(imagesurl).then(imageArray => {
           console.log(imageArray);
           temp = "<div class=\"imageThumbBox\">\n" +
           "<div class=\"imageThumbs\">\n";
