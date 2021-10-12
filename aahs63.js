@@ -310,16 +310,16 @@ function do_classList() {
       
       var query = "SELECT A, K WHERE A = '" + id + "'";
         var classmatesurl = formatURL(classmatefile_id, classmatesheet, query);
-        //alert(classmatesurl)
         fetchGoogleData(classmatesurl).then(dataArray => {
-          profiledata = dataArray.table.rows;
-          console.log(profiledata);
+          var profiledata = dataArray.table.rows;
+          delete(dataArray);
           if (profiledata[0]['c'][1] != null && profiledata[0]['c'][1].v != null) {
             jQuery('.classmateContent').html(profiledata[0]['c'][1].v);
           }
           else {
             jQuery('.classmateContent').html('<p>No profile found</p>');
-          } 
+          }
+          delete(profiledata);
         });
 
       /* ----------------------------------------------------------- */
@@ -339,17 +339,17 @@ function do_classList() {
         var query = "SELECT A, B, C, D " + where;
         var imagesurl = formatURL(image_file_id, image_sheet, query);
         fetchGoogleData(imagesurl).then(imageArray => {
-          console.log(imageArray);
           temp = "<div class=\"imageThumbBox\">\n" +
           "<div class=\"imageThumbs\">\n";
           
           splitimages.forEach(function(item,key) {
            var imageRows = imageArray.table.rows;
+           delete(imageArray);
            var thesrc = 'https://via.placeholder.com/150?text=' + item;
             imageRows.forEach(function(xitem, key) { 
              if (xitem.c[0].v == item.toString()) {
                 if (xitem.c[2] != null && xitem.c[2].v != null) {
-                  google = xitem.c[3].v;
+                  var google = xitem.c[3].v;
                   //thesrc = 'https://www.grcrane2.com/aahs63_images/' + xitem.c[2].v;
                   thesrc = 'https://drive.google.com/uc?export=view&id=' + google;
                 }
@@ -357,7 +357,8 @@ function do_classList() {
 
             })
 
-          temp = temp + '<a href="' + thesrc + '"><img src="' + thesrc + '"></a>';      
+          temp = temp + '<a href="' + thesrc + '"><img src="' + thesrc + '"></a>';   
+          delete(imageRows);   
           })
 
           temp = temp+ "</div></div>\n" +
