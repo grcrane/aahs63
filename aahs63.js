@@ -38,12 +38,41 @@ var image_file_id = '1EDNx6F1ywhoEsnNS2DSSyBkgNphoQEnmccFS3gOZ5PU';
 var image_sheet = 'Allimages';
 var imagequery = "SELECT A, B, C, D";
 var imagessurl = formatURL(image_file_id, image_sheet, imagequery);
+jQuery('<div id="markTime"></div>').appendTo("p#found");
+jQuery('<div id="loading"></div>').insertBefore("div.gallery-items");
 
 async function fetchGoogleData(url) {
+  var performance = window.performance;
+  var t0 = performance.now();
+  
   const googleResponse = await fetch(url);
   var data = await googleResponse.text();
-  data = JSON.parse(data.substr(47).slice(0, -2))
+  data = JSON.parse(data.substr(47).slice(0, -2)).table.rows
+  var t1 = performance.now();
+  jQuery("div#markTime").text(" (" + (t1 - t0) + "ms)");
   return data;
+}
+
+async function fetchGoogleDataAll(url) {
+  var performance = window.performance;
+  var t0 = performance.now();
+  
+  const [googleResponse1, googleResponse2] = await Promise.all([
+    fetch(url + ' LIMIT 350'),
+    fetch(url + ' OFFSET 350')
+  ]);
+  var data1 = await googleResponse1.text();
+  var data2 = await googleResponse2.text();
+  data1 = JSON.parse(data1.substr(47).slice(0, -2)).table.rows;
+  data2 = JSON.parse(data2.substr(47).slice(0, -2)).table.rows;
+  console.log(data1);
+  console.log(data2);
+  var t1 = performance.now();
+  jQuery("div#markTime").text(" (" + (t1 - t0) + "ms)");
+  const mergeResult = [...data1, ...data2];
+  delete(data1);
+  delete(data2);
+  return mergeResult;
 }
 
 var position = jQuery(window).scrollTop(); 
@@ -145,10 +174,12 @@ function do_reset() {
 function do_classList() {
   var memberRows = []; 
 
-  fetchGoogleData(classmatesurl).then(dataArray => {
+  myTimer1 = setTimeout(function(){ jQuery('div#loading').show(); }, 1000);
+  fetchGoogleDataAll(classmatesurl).then(dataArray => {
     //dataArray;     // fetched classmate list
     // do everything here 
-
+    clearTimeout(myTimer1);
+    jQuery('div#loading').hide(); 
     var titles = []; 
     var coltitles = ["View","ID","Last Name","First Name","Middle","Married","Image"];  
     coltitles.forEach(function(item, index) {
@@ -159,7 +190,8 @@ function do_classList() {
     
     // push data array
     var data = []; 
-    memberRows = dataArray.table.rows;
+    memberRows = dataArray;
+    //memberRows = dataArray.table.rows;
     delete(dataArray); // all done with this variable
     memberRows.forEach(function(item, key) { 
       var theclass = "";
@@ -266,14 +298,6 @@ function do_classList() {
       }
       jQuery('#idImage').html(img);
 
-      /*
-      if (memberRows[row]['c'][8] != null && memberRows[row]['c'][8].v != null) {
-        jQuery('.classmateContent').html(memberRows[row]['c'][8].v);
-      }
-      else {
-          jQuery('.classmateContent').html('<p>No profile found</p>');
-        } 
-      */
       jQuery('p.status').text('Status: ' + status);  
       var formurl = 'https://docs.google.com/forms/d/e/1FAIpQLSdG4w35Ip2u5-q9R7W8R5euIB4CJVqDHTrbIs8lxhx4Rq1jKA/viewform' +
         '?usp=pp_url&entry.1389452980=' + name;
@@ -311,15 +335,12 @@ function do_classList() {
       var query = "SELECT A, K WHERE A = '" + id + "'";
         var classmatesurl = formatURL(classmatefile_id, classmatesheet, query);
         fetchGoogleData(classmatesurl).then(dataArray => {
-          var profiledata = dataArray.table.rows;
-          delete(dataArray);
-          if (profiledata[0]['c'][1] != null && profiledata[0]['c'][1].v != null) {
-            jQuery('.classmateContent').html(profiledata[0]['c'][1].v);
+          if (dataArray[0]['c'][1] != null && dataArray[0]['c'][1].v != null) {
+            jQuery('.classmateContent').html(dataArray[0]['c'][1].v);
           }
           else {
             jQuery('.classmateContent').html('<p>No profile found</p>');
           }
-          delete(profiledata);
         });
 
       /* ----------------------------------------------------------- */
@@ -343,10 +364,9 @@ function do_classList() {
           "<div class=\"imageThumbs\">\n";
           
           splitimages.forEach(function(item,key) {
-           var imageRows = imageArray.table.rows;
-           delete(imageArray);
+   
            var thesrc = 'https://via.placeholder.com/150?text=' + item;
-            imageRows.forEach(function(xitem, key) { 
+            imageArray.forEach(function(xitem, key) { 
              if (xitem.c[0].v == item.toString()) {
                 if (xitem.c[2] != null && xitem.c[2].v != null) {
                   var google = xitem.c[3].v;
@@ -358,7 +378,7 @@ function do_classList() {
             })
 
           temp = temp + '<a href="' + thesrc + '"><img src="' + thesrc + '"></a>';   
-          delete(imageRows);   
+      
           })
 
           temp = temp+ "</div></div>\n" +
