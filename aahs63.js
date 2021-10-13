@@ -65,8 +65,8 @@ async function fetchGoogleDataAll(url) {
   var data2 = await googleResponse2.text();
   data1 = JSON.parse(data1.substr(47).slice(0, -2)).table.rows;
   data2 = JSON.parse(data2.substr(47).slice(0, -2)).table.rows;
-  console.log(data1);
-  console.log(data2);
+  //console.log(data1);
+  //console.log(data2);
   var t1 = performance.now();
   jQuery("div#markTime").text(" (" + (t1 - t0) + "ms)");
   const mergeResult = [...data1, ...data2];
