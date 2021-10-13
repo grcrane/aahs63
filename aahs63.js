@@ -22,15 +22,19 @@ https://dmitripavlutin.com/javascript-fetch-async-await/
 */
 
 function formatURL(file_id, sheet, query) {
+  var d = new Date();
+  var n = d.getTime(); 
   var temp = 'https://docs.google.com/spreadsheets/u/0/d/'
   + file_id + '/gviz/tq?headers=1&sheet=' + sheet 
+  + '&t=' + n 
   + '&tqx=out:json&headers=1&tq=' + 
   escape(query);
   return temp; 
 }
 
 var classmatefile_id ="1RtXQ2sO42sW-3SInyNIjO_lUr_2pfJrWCr8xM0jNp3I";
-var classmatesheet = "Classmates";
+//var classmatesheet = "Classmates";
+var classmatesheet = "Sheet2";
 var query = "SELECT A, B, C, D, E, I, H, J, K, L, M, N, O ORDER BY B, C";
 var classmatesurl = formatURL(classmatefile_id, classmatesheet, query);
 
