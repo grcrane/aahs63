@@ -179,16 +179,9 @@ function do_classList() {
   var memberRows = []; 
 
   myTimer1 = setTimeout(function(){ jQuery('div#loading').show(); }, 1000);
-  fetchGoogleDataAll(classmatesurl).then(dataArray => {
-    //dataArray;     // fetched classmate list
-    // do everything here 
+  fetchGoogleData(classmatesurl).then(dataArray => {
     clearTimeout(myTimer1);
     jQuery('div#loading').hide(); 
-    var titles = []; 
-    var coltitles = ["View","ID","Last Name","First Name","Middle","Married","Image"];  
-    coltitles.forEach(function(item, index) {
-        titles.push({title: item})
-    })
 
     var maxItem = parseInt(jQuery("#classmateItems").val());
     
