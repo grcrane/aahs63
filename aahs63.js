@@ -29,13 +29,14 @@ function formatURL(file_id, sheet, query) {
   + '&t=' + n 
   + '&tqx=out:json&headers=1&tq=' + 
   escape(query);
+  //alert(temp);
   return temp; 
 }
 
 var classmatefile_id ="1RtXQ2sO42sW-3SInyNIjO_lUr_2pfJrWCr8xM0jNp3I";
-//var classmatesheet = "Classmates";
-var classmatesheet = "Sheet2";
-var query = "SELECT A, B, C, D, E, I, H, J, K, L, M, N, O ORDER BY B, C";
+var classmatesheet = "Classmates";
+//var classmatesheet = "Sheet2";
+var query = "SELECT A, B, C, D, E, I, H, J, P, L, M, N, O ORDER BY B, C";
 var classmatesurl = formatURL(classmatefile_id, classmatesheet, query);
 
 var image_file_id = '1EDNx6F1ywhoEsnNS2DSSyBkgNphoQEnmccFS3gOZ5PU';
