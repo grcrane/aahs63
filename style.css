@@ -300,9 +300,16 @@ div#markTime {
    margin-left:  10px;
 }
 
+div#loading {
+   display:  none;
+   text-align: center;
+   font-weight: 600;
+   margin:  0 auto;
+}
 
 div#loading div.message {
    padding-bottom:  10px;
+   text-align:  center;
 }
 
 div#loading div.spinner  {
