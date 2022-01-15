@@ -212,7 +212,7 @@ function do_classList() {
       if (item.c[7] != null && item.c[7].v != null) { thesrc = item.c[7].v;}
       if (item.c[8] != null && item.c[8].v != null) { thepassed = item.c[8].v;}
       if (item.c[9] != null && item.c[9].v != null) { theobit = item.c[9].v;}
-      if (item.c[12] != null && item.c[12].v != null) { theimages = item.c[12].v;}
+      if (item.c[10] != null && item.c[10].v != null) { theimages = item.c[10].v;}
       if (item.c[0] != null && item.c[0].v != null) { id = item.c[0].v;}
       if (thesrc) {
         //thesrc = 'https://www.grcrane2.com/aahs63_images/' +thesrc;
