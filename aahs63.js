@@ -178,7 +178,7 @@ function do_reset() {
 /* Open modal window for calassmate details                    */
 /* ----------------------------------------------------------- */  
 
-function addMyModal () {
+function addMyModal (selectorID) {
   var myModalID = jQuery('#myModal');
   var myModal = `<!-- The Modal -->
   <div id="myModal" class="modal">
@@ -203,11 +203,104 @@ function addMyModal () {
 
    </div>`;
    if (myModalID.length == 0) {
-    jQuery('section#primary').append(myModal);
+    //jQuery('section#primary').append(myModal);
+    jQuery(myModal).insertAfter(selectorID);
    }
 }
 
-function do_classList() {
+function addBody(selectorID) {
+
+  temp = `
+    <section id="primary" class="content-single content-area">
+      <main id="main" class="site-main" role="main">
+        
+      <div id="classList">
+         <div class="gallery-container">
+            <div class="title">
+               <h2>AAHS Class of '63</h2>
+               <div class="helpLocate"><a href="#">Help Us Locate Someone</a></div>
+            </div>
+            <div id="searchBoxes">
+               <div class="searchBox">
+                  Items: 
+                  <select name="classmateItems" id="classmateItems">
+                     <option value="10">10</option>
+                     <option value="20">20</option>
+                     <option value="50">50</option>
+                  </select>
+               </div>
+               <div class="searchBox">
+                  Search: <input type="text" id="search">
+               </div>
+               <div class="searchBox">
+                  <label for="classmateType">Type:</label>
+                  <select name="classmateType" id="classmateType">
+                     <option value="">Any</option>
+                     <option value="classmate">Classmate</option>
+                     <option value="staff">Staff</option>
+                     <option value="other">Other</option>
+                  </select>
+               </div>
+               <div class="searchBox">
+                  Status: 
+                  <select name="classmateStatus" id="classmateStatus">
+                     <option value="">Any</option>
+                     <option value="passed">Passed</option>
+                     <option value="found">Found</option>
+                     <option value="missing">No Contact Info</option>
+                     <option value="profile">Has Profile</option>
+                     <option value="need">Passed ?</option>
+                  </select>
+               </div>
+               <div class="searchBox">
+               </div>
+            </div>
+            <p id="found"><span class="count"></span><a href="#" id="resetValues">(Clear)</a><div id="markTime"></div></p>
+            <div class="text-center">
+               <div class="pagination-holder clearfix">
+                  <div class="light-pagination pagination light-theme simple-pagination">
+                  </div>
+               </div>
+            </div>
+            <div id="loading">
+               <div class="message">Gathering classmate information...</div>
+               <div class="spinner"></div>
+            </div>
+            <div class="gallery-items"></div>
+            <p>
+            <div class="text-center">
+               <div class="pagination-holder clearfix">
+                  <div class="light-pagination pagination light-theme simple-pagination">
+                  </div>
+               </div>
+            </div>
+         </div>
+         
+         <div id="locateInfo">
+            <button class="backButton" type="button">Return to classmate list</button>
+            <div class="title">
+               <h2>Help Us Locate Your Classmates</h2>
+            </div>
+            <p>
+               The Class of '63 Reunion Committee is constantly trying to keep up with informaton 
+               about classmates.  Sadly, with over 700 classmates we have lost track of quite a few.
+               Some have changed emails, moved, change phone numbers or unfortunately passed away.  
+            <p>We could really use your help.  If you see someone you personally know, or have some information about then please, please pass it along to us.
+            <p>We will eventually have a handy on-line form for you, but in the mean time, please send us comments and information via email to <a style="text-decoration:underline;" href="mailto:aahs63@aahs.com">aahs63@aahs.com</a>. 
+            <div style="width:80%;text-align:center;margin: 0 auto;">
+               <br>
+               <div style="font-weight:bold;">Your AAHS ’63 Reunion Committee:</div>
+               <br>George Crane, Barbara (Stanley) Kramer, Butch Larkins, Carol (Schonberger) Spears, Rick Weid, Chuck Wilkins
+               </p>
+               <div style="clear:both;"></div>
+            </div>
+         </div>
+      </div>`;
+      jQuery(selectorID).html(temp);
+}
+
+function do_classList(selectorID = 'body') {
+  addBody(selectorID);
   var memberRows = []; 
 
   myTimer1 = setTimeout(function(){ jQuery('div#loading').show(); }, 2000);
@@ -443,7 +536,7 @@ function do_classList() {
         
         //modal.style.display = "block";
         jQuery('#myModal').show();
-        jQuery('main#main').hide();
+        jQuery(selectorID).hide();
         jQuery('html').scrollTop(0);
         delete(memberRows);  // all done with this variable
     })
@@ -474,7 +567,7 @@ function do_classList() {
       do_page(); 
     })
 
-    addMyModal(); 
+    addMyModal(selectorID); 
 
     // Get the modal
     var modal = document.getElementById("myModal");
@@ -483,7 +576,7 @@ function do_classList() {
     jQuery("span.close, span.bottomClose").on('click',function(e) {
       e.preventDefault();
       modal.style.display = "none";
-      jQuery('main#main').show();
+      jQuery(selectorID).show();
       jQuery(window).scrollTop(windowposition); 
     })
     
@@ -492,7 +585,7 @@ function do_classList() {
     window.onclick = function(event) {
       if (event.target == modal) {
         modal.style.display = "none";
-        jQuery('main#main').show();
+        jQuery(selectorID).show();
         jQuery(window).scrollTop(windowposition); 
       }
     } 
