@@ -38,6 +38,13 @@ var imageNumberXRef = [];
 
 var windowposition = 0; 
 
+/* https://stackoverflow.com/questions/19491336/how-to-get-url-parameter-using-jquery-or-plain-javascript */
+function getSearchParams(k){
+ var p={};
+ location.search.replace(/[?&]+([^=&]+)=([^&]*)/gi,function(s,k,v){p[k]=v})
+ return k?p[k]:p;
+}
+
 /* ----------------------------------------------------------- */
 /* Fetch one or more URL's from Google                         */
 /* ----------------------------------------------------------- */  
