@@ -533,7 +533,7 @@ function do_classList(selectorID = 'body') {
         
         //modal.style.display = "block";
         jQuery('#myModal').show();
-        jQuery(selectorID).hide();
+        jQuery('#classList').hide();
         jQuery('html').scrollTop(0);
         delete(memberRows);  // all done with this variable
     })
@@ -573,7 +573,7 @@ function do_classList(selectorID = 'body') {
     jQuery("span.close, span.bottomClose").on('click',function(e) {
       e.preventDefault();
       modal.style.display = "none";
-      jQuery(selectorID).show();
+      jQuery('#classList').show();
       jQuery(window).scrollTop(windowposition); 
     })
     
@@ -582,7 +582,7 @@ function do_classList(selectorID = 'body') {
     window.onclick = function(event) {
       if (event.target == modal) {
         modal.style.display = "none";
-        jQuery(selectorID).show();
+        jQuery('#classList').show();
         jQuery(window).scrollTop(windowposition); 
       }
     } 
