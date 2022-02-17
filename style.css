@@ -326,3 +326,157 @@ div#loading div.spinner  {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
 }
+
+/* ---- updated css */
+
+#myModal table {
+  border-collapse: collapse;
+  width: auto;
+  margin-top: 20px;
+}
+
+#myModal td {
+    background: #eee;
+    font-weight: normal;
+    padding: 10px;
+    border-bottom: 1px solid black;
+}
+
+#myModal tr td:first-child {
+    background: rgb(var(--global-bcolor-campweeks));
+    color: rgb(var(--global-color-campweeks));
+}
+
+.modal-content {
+  background-color: #fefefe;
+  padding: 20px;
+  width: 100%;
+  border-radius: 20px;
+  border: 5px solid #6d6d6d;
+  font-family: "proxima-nova", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: Poppins;
+  font-weight: 300;
+  font-style: normal;
+  letter-spacing: 0em;
+  text-transform: none;
+  font-size: 1rem;
+  line-height: 1.8;
+  position: relative;
+}
+
+.modal {
+  display: none;
+  position: relative;
+  width: 100%;
+}
+
+.modal-content .theModalContent {
+  margin: 0 20px;
+}
+
+#myModal img.campImage {
+  width:  100%;
+  min-height:  200px;
+  object-fit: cover;
+}
+
+#myModal div.imageDiv {
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+#myModal .campTitle {
+  font-weight:  bold;
+  text-align:  center;
+}
+
+#myModal .signUpButton {
+  display: block;
+  clear: both;
+  margin-top: 20px;
+}
+
+#myModal .signUpButton a {
+  padding: .6rem 1.002rem;
+  border: 1px solid black;
+  margin-top: 20px;
+  border-radius: 10px;
+}
+
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  line-height:  28px;
+  font-weight: bold;
+  position:  absolute;
+  top:  20px;
+  right:  20px;
+}
+
+.close:hover,
+.close:focus,
+.bottomClose:hover,
+.bottomClose:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.bottomClose {
+  color: #aaa;
+   text-align: center;
+   display: block;
+   font-weight: bold;
+   font-size: 1.5em;
+   text-decoration: none;
+   cursor: pointer;
+   margin-bottom: 40px;
+}
+
+.idImage div.empty {
+    background: #eee;
+    width: 150px;
+    height: 200px;
+}
+
+div.imageThumbs {
+  display:  flex;
+}
+
+div.imageThumbs a img {
+  padding:  10px;
+  max-width: 400px;
+  max-height: 300px;
+  object-fit: cover;
+}
+
+/*@mobile:          ~"only screen and (max-width: 750px)";
+@tablet:          ~"only screen and (min-width: 751px)";
+@tablet-strict:   ~"only screen and (min-width: 751px) and (max-width: 949px)";
+@tablet-desktop:  ~"only screen and (min-width: 751px)";
+@desktop:         ~"only screen and (min-width: 950px)";
+@desktop-strict:  ~"only screen and (min-width: 950px) and (max-width: 1199px)";
+@desktop-xl:      ~"only screen and (min-width: 1200px)";
+*/
+
+@media only screen and (max-width: 750px) {
+   .modal-content {
+      width: 90%; 
+      margin: 50px auto; 
+   }
+
+}
+
+div.classmateContent p:first-child {
+   margin-top:  0;
+}
+
+div.idImage {
+   margin-top:  5px;
+}
+
+#classList .gallery-items .errorMessage {
+  color:  red;
+  font-size:  1.2em;
+}
