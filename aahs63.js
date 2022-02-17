@@ -210,10 +210,7 @@ function addMyModal (selectorID) {
 
 function addBody(selectorID) {
 
-  temp = `
-    <section id="primary" class="content-single content-area">
-      <main id="main" class="site-main" role="main">
-        
+  temp = ` 
       <div id="classList">
          <div class="gallery-container">
             <div class="title">
