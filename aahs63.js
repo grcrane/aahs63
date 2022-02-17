@@ -3,24 +3,6 @@
 /* George Crane, August 2021                              */
 /* ------------------------------------------------------ */
 
-/* Usage 
-
-jQuery(document).ready(function() {
-  do_classList();   
-});
-
-writes to .gallery-container .gallery-items
-
-<div id="classList">          
-  <div class="gallery-container">
-    <div class="gallery-items"></div>
-  </div>
-</div>
-
-https://dmitripavlutin.com/javascript-fetch-async-await/
-
-*/
-
 function formatURL(file_id, sheet, query) {
   var d = new Date();
   var n = d.getTime(); 
@@ -33,12 +15,6 @@ function formatURL(file_id, sheet, query) {
   return temp; 
 }
 
-var classmatefile_id ="1RtXQ2sO42sW-3SInyNIjO_lUr_2pfJrWCr8xM0jNp3I";
-var classmatesheet = "Classmates";
-//var classmatesheet = "Sheet2";
-var query = "SELECT A, B, C, D, E, I, H, J, P, L, M, N, O ORDER BY B, C";
-var classmatesurl = formatURL(classmatefile_id, classmatesheet, query);
-
 var image_file_id = '1EDNx6F1ywhoEsnNS2DSSyBkgNphoQEnmccFS3gOZ5PU';
 var image_sheet = 'Allimages';
 var imagequery = "SELECT A, B, C, D";
@@ -46,39 +22,54 @@ var imagessurl = formatURL(image_file_id, image_sheet, imagequery);
 jQuery('<div id="markTime"></div>').appendTo("p#found");
 jQuery('<div id="loading"></div>').insertBefore("div.gallery-items");
 
-async function fetchGoogleData(url) {
-  var performance = window.performance;
-  var t0 = performance.now();
-  
-  const googleResponse = await fetch(url);
-  var data = await googleResponse.text();
-  data = JSON.parse(data.substr(47).slice(0, -2)).table.rows
-  var t1 = performance.now();
-  jQuery("div#markTime").text(" (" + (t1 - t0) + "ms)");
-  return data;
+/* ----------------------------------------------------------- */
+/* Initialize variables                                        */
+/* ----------------------------------------------------------- */  
+
+//Copy of Master List Public View (aahsclassof63@gmail.com)
+var classmatefile_id ="1iF4ZFThYH6qRH9TyoEdxRDjVUplg8LIyolDlkbJbUzY";
+var classmatesheet = "Sheet1";
+var query = "";
+var classmatesurl = formatURL(classmatefile_id, classmatesheet, query);
+
+var imageArray = [];
+var imageData = [];
+var imageNumberXRef = []; 
+
+var windowposition = 0; 
+
+/* ----------------------------------------------------------- */
+/* Fetch one or more URL's from Google                         */
+/* ----------------------------------------------------------- */  
+
+async function fetchGoogleDataAll(urls) {
+  let promises = [];
+  //urls[1] = 'xx'; // to test errors
+  var status = ''; 
+  urls.map(x => promises.push(
+    fetch(x)
+      .then((response) => {
+        if (response.status >= 200 && response.status <= 299) {
+          return response;
+        } else {
+          status = response.statusText;
+        }
+      })
+      .catch((error) => {
+        status = error;
+      })
+  ));
+  const promisResponse = await Promise.all(promises);
+  var data3 = []; 
+  if (!status) {
+    for (let i = 0; i < promisResponse.length; i++){
+      var temp = await promisResponse[i].text();
+      data3.push(JSON.parse(temp.substr(47).slice(0, -2)));
+    }
+  }
+  return [data3,status];
 }
 
-async function fetchGoogleDataAll(url) {
-  var performance = window.performance;
-  var t0 = performance.now();
-  
-  const [googleResponse1, googleResponse2] = await Promise.all([
-    fetch(url + ' LIMIT 350'),
-    fetch(url + ' OFFSET 350')
-  ]);
-  var data1 = await googleResponse1.text();
-  var data2 = await googleResponse2.text();
-  data1 = JSON.parse(data1.substr(47).slice(0, -2)).table.rows;
-  data2 = JSON.parse(data2.substr(47).slice(0, -2)).table.rows;
-  //console.log(data1);
-  //console.log(data2);
-  var t1 = performance.now();
-  jQuery("div#markTime").text(" (" + (t1 - t0) + "ms)");
-  const mergeResult = [...data1, ...data2];
-  delete(data1);
-  delete(data2);
-  return mergeResult;
-}
 
 var position = jQuery(window).scrollTop(); 
 
@@ -176,44 +167,116 @@ function do_reset() {
   jQuery('#search').val('');
 }
 
+/* ----------------------------------------------------------- */
+/* Open modal window for calassmate details                    */
+/* ----------------------------------------------------------- */  
+
+function addMyModal () {
+  var myModalID = jQuery('#myModal');
+  var myModal = `<!-- The Modal -->
+  <div id="myModal" class="modal">
+
+    <!-- Modal content -->
+    <div class="modal-content">
+      <span class="close">Close</span>
+      <div class="theModalContent"></div>
+         <header class="entry-header">
+            <h1 class="entry-title classmateTitle">Brayl, Jim<sup>**</sup></h1>
+         </header>
+         <div class="idImage" style="float:left;margin-right: 10px;">
+            <img alt="" title="Brayl, Jim" class="idPhotoImage" src="">
+         </div>
+         <div class="classmateContent">
+            classmate content
+         </div>
+         <div style="clear:both;"></div>
+         <p class="status"></p>
+         <span class="bottomClose">Close</span>
+      </div>
+
+   </div>`;
+   if (myModalID.length == 0) {
+    jQuery('section#primary').append(myModal);
+   }
+}
+
 function do_classList() {
   var memberRows = []; 
 
-  myTimer1 = setTimeout(function(){ jQuery('div#loading').show(); }, 1000);
-  fetchGoogleData(classmatesurl).then(dataArray => {
+  myTimer1 = setTimeout(function(){ jQuery('div#loading').show(); }, 2000);
+  var imagesurl = formatURL(image_file_id, image_sheet, "");
+  fetchGoogleDataAll([classmatesurl,imagesurl]).then(dataArrayx => {
+    if (dataArrayx[1]) {  // if there was a status error of some kind
+      clearTimeout(myTimer1);
+      jQuery('div#loading').hide();
+      jQuery('#classList .gallery-items')
+        .html('<div class="errorMessage">Error fetching spreadsheet, status= ' + dataArrayx[1] + ' try refreshing page</div>');
+      return; 
+    }
+    dataArray = dataArrayx[0][0].table.rows;
+    imageData = dataArrayx[0][1].table.rows;
+
     clearTimeout(myTimer1);
     jQuery('div#loading').hide(); 
 
     var maxItem = parseInt(jQuery("#classmateItems").val());
-    
-    // push data array
-    var data = []; 
-    memberRows = dataArray;
-    //memberRows = dataArray.table.rows;
-    delete(dataArray); // all done with this variable
-    memberRows.forEach(function(item, key) { 
+
+    dataArray.forEach(function(item,key) {
+      if (item.c[0] != null) {
+        var ar = [];
+        for (let i = 0; i < 16; i++) {
+          var val =  (item.c[i] != null) ? item.c[i].v : '';
+          ar.push(val);
+        } 
+        memberRows.push(ar);
+      }
+    });
+
+    // Build an array of image names for quick lookup
+    // for lookup
+
+    var imageXRef = []; 
+    imageData.forEach(function(item,key) {
+      var xname =  (item.c[2] != null ) ? item.c[2].v : '';
+      imageXRef.push(xname.toUpperCase());
+    });
+
+    // Build an array of image numbers for quick lookup
+    // for lookup
+
+    imageNumberXRef = []; 
+    imageData.forEach(function(item,key) {
+      var xnumber =  (item.c[0] != null ) ? item.c[0].v : '';
+      imageNumberXRef.push(xnumber);
+    });
+
+    memberRows.sort( function(a, b) {
+      return a[1].localeCompare(b[1])
+        || a[2].localeCompare(b[2]);
+    })
+
+    memberRows.forEach(function(item, key) {
       var theclass = "";
-      var thesrc = '';
-      var thestatus = 'Unknown';
-      var themarried = ''; 
-      var hasprofile = 'N';
-      var thetype = 'classmate';
-      var id = '';
-      var thepassed = ''; 
-      var theobit = ''; 
-      var google = ''; 
-      var theimages = '';
       var needinfo = 'no';
-      if (item.c[11] != null && item.c[11].v != null) { google = item.c[11].v;}
-      if (item.c[8] != null && item.c[8].v != null) { hasprofile = 'Y';}
-      if (item.c[4] != null && item.c[4].v != null) { themarried = item.c[4].v;}
-      if (item.c[6] != null && item.c[6].v != null) { thestatus = item.c[6].v;}
-      if (item.c[5] != null && item.c[5].v != null) { thetype = item.c[5].v;}
-      if (item.c[7] != null && item.c[7].v != null) { thesrc = item.c[7].v;}
-      if (item.c[8] != null && item.c[8].v != null) { thepassed = item.c[8].v;}
-      if (item.c[9] != null && item.c[9].v != null) { theobit = item.c[9].v;}
-      if (item.c[10] != null && item.c[10].v != null) { theimages = item.c[10].v;}
-      if (item.c[0] != null && item.c[0].v != null) { id = item.c[0].v;}
+      var id = item[0];
+      var name = item[1] + ', ' + item[2];
+      var themarried = item[4]; 
+      var thestatus = (item[7]) ? item[7] : 'Unknown';
+      var thetype = (item[8]) ? item[8] : 'classmate'; 
+      var thesrc = item[9];
+      var thepassed = item[15]; 
+      var theobit = item[11]; 
+      var google = ''; 
+      //var theprofile = item[10];
+      var hasprofile = (item[10]) ? 'Y' : 'N';
+      var theimages = item[12]; 
+
+      var x = imageXRef.indexOf(thesrc.toUpperCase()); 
+   
+      if (x > -1) {
+        google = (imageData[x].c[3] != null) ? imageData[x].c[3].v : null;
+      }   
+
       if (thesrc) {
         //thesrc = 'https://www.grcrane2.com/aahs63_images/' +thesrc;
         thesrc = 'https://drive.google.com/uc?export=view&id=' + google;
@@ -223,18 +286,18 @@ function do_classList() {
           needinfo = 'yes';
         }
       }
-      var out = '<a class="itemLink" href="#" data-row="' + key + '" data-id="' + id + '"><div class="item" data-profile="' + hasprofile + '" data-name="' + item.c[1].v + ', ' + item.c[2].v + " " + themarried +
+      var out = '<a class="itemLink" href="#" data-row="' + key + '" data-id="' + id + '"><div class="item" data-profile="' + hasprofile + '" data-name="' + name + " " + themarried +
         '" data-type="' + thetype + '" data-status="' + thestatus.toLowerCase() + 
-        '" data-href="' + thesrc + '" data-need="' + needinfo + '"' + 
+        '" data-href="' + thesrc + '" data-need="' + needinfo +  
         '" data-images="' + theimages + '">\n';
       if (key > maxItem ) {thesrc = '';} 
-      if (thesrc) {
+      if (thesrc && google) {
         out = out + '<img class="' + theclass + '"  src="' + thesrc + '" xalt="No image" /></a>\n';
       }
       else {
         out = out + '<div class="empty"></div></a>'; 
       }
-        var name = item.c[1].v + ', ' + item.c[2].v;
+        //var name = item.c[1].v + ', ' + item.c[2].v;
         if (themarried) {name = name + " (" + themarried + ")";}
         out = out + '<div class="caption">\n' +
         name + 
@@ -260,41 +323,42 @@ function do_classList() {
 
     jQuery('.itemLink').on('click', function (event) {
       event.preventDefault(); 
-
-      /*
-      select a.id, a.post_title, b.meta_value gallery from wp_posts a 
-      left join wp_postmeta b on a.id = b.post_id and b.meta_key = '_classmate_photos'
-      where post_type = 'classmates' and post_status = 'publish'
-      and b.meta_value is not null and b.meta_value != ''
-      */
-
+      windowposition = jQuery(window).scrollTop(); 
       var id = jQuery(this).data("id");
       var row = jQuery(this).data("row");
-      var status = jQuery(this).parent().data("status");
-      var name = jQuery(this).parent().find('div.caption').text();
-      var imgsrc = jQuery(this).find('img').attr('src');
-      var theimages = jQuery(this).parent().data("images");
-      jQuery('#classmateInfo header h1').text(name);
-      jQuery('p.status').text('Status: ' + status);
+     // var imgsrc = jQuery(this).find('img').attr('src');
+      var imgsrc = jQuery(this).closest('div.item').data('href');
+      
+      
       var needinfo = jQuery(this).parent().data("need");
       jQuery('.classmateContent').text('');
 
+      console.log(memberRows[row]);
+      var profiletext = memberRows[row][10];
+      var name = memberRows[row][1] + ', ' + memberRows[row][2];
+      jQuery('#classmateInfo header h1').text(name);
+      jQuery('.modal-content header h1').text(name);
+      var status = (memberRows[row][7]) ? memberRows[row][7] : 'Unknown';
+      var theimages = memberRows[row][12];
+      jQuery('p.status').text('Status: ' + status);
+
       var obit = 'Missing'; 
-      if (memberRows[row]['c'][9] != null && memberRows[row]['c'][9].v != null) {
-        obit = '<a href="' + memberRows[row]['c'][9].v + '" target="_blank">' +
-        memberRows[row]['c'][9].v + '</a>\n';
+      if (memberRows[row][11]) {
+        obit = '<a href="' + memberRows[row][11] + '" target="_blank">' +
+        memberRows[row][11] + '</a>\n';
       }
       var death = 'Unknown';
-      if (memberRows[row]['c'][10] != null && memberRows[row]['c'][10].v != null) {
-        death = memberRows[row]['c'][10].v;
+      if (memberRows[row][10]) {
+        death = memberRows[row][10];
       }
 
-      var img = '';
-      if (memberRows[row]['c'][7] != null && memberRows[row]['c'][7].v != null) {
+      var img = '<div class="empty"></div>';
+      if (imgsrc) {
         img = '<img class="idPhotoImage profileImg" src="' + imgsrc + '">';
 
       }
       jQuery('#idImage').html(img);
+      jQuery('.idImage').html(img);
 
       jQuery('p.status').text('Status: ' + status);  
       var formurl = 'https://docs.google.com/forms/d/e/1FAIpQLSdG4w35Ip2u5-q9R7W8R5euIB4CJVqDHTrbIs8lxhx4Rq1jKA/viewform' +
@@ -309,37 +373,20 @@ function do_classList() {
       temp = temp + '<div class="updateHelp">Help update, click <a href="' + formurl + '" target="_blank">here</a> if you have additional information.</div>'; 
       jQuery(temp).appendTo('p.status');
 
-      jQuery('div.imageThumbBox').remove(); 
+      jQuery('div.imageThumbBox, div.classmateVideos').remove(); 
 
       var temp = ''; 
-
-      /* ----------------------------------------------------------- */
-      /* Show the classmates detail information                      */
-      /* ----------------------------------------------------------- */
-
-      function showClassmateInfo() {
-        position = jQuery(window).scrollTop(); 
-        jQuery('#classmateInfo').show();
-        jQuery('.gallery-container').hide(); 
-        jQuery('#locateInfo').hide();   
-        var elmnt = document.getElementById("page");
-        elmnt.scrollIntoView(true); 
-      }
      
       /* ----------------------------------------------------------- */
       /* Get the classmates profile, if it exists.                   */
       /* ----------------------------------------------------------- */
       
-      var query = "SELECT A, K WHERE A = '" + id + "'";
-        var classmatesurl = formatURL(classmatefile_id, classmatesheet, query);
-        fetchGoogleData(classmatesurl).then(dataArray => {
-          if (dataArray[0]['c'][1] != null && dataArray[0]['c'][1].v != null) {
-            jQuery('.classmateContent').html(dataArray[0]['c'][1].v);
-          }
-          else {
-            jQuery('.classmateContent').html('<p>No profile found</p>');
-          }
-        });
+      if (profiletext) {
+         jQuery('.classmateContent').html(profiletext);
+      }
+      else {
+         jQuery('.classmateContent').html('<p>No profile found</p>');
+      }
 
       /* ----------------------------------------------------------- */
       /* Get the classmates extra images                             */
@@ -350,52 +397,59 @@ function do_classList() {
         var splitimages = theimages.split(":");
         var where = ' WHERE ';
         var sep = '';
-        splitimages.forEach(function(item,key) { 
-          where += sep + " A='" + item + "'";
-          sep= ' OR '; 
-        })
-
-        var query = "SELECT A, B, C, D " + where;
-        var imagesurl = formatURL(image_file_id, image_sheet, query);
-        fetchGoogleData(imagesurl).then(imageArray => {
-          temp = "<div class=\"imageThumbBox\">\n" +
+        var temp = "<div class=\"imageThumbBox\">\n" +
           "<div class=\"imageThumbs\">\n";
-          
-          splitimages.forEach(function(item,key) {
-   
-           var thesrc = 'https://via.placeholder.com/150?text=' + item;
-            imageArray.forEach(function(xitem, key) { 
-             if (xitem.c[0].v == item.toString()) {
-                if (xitem.c[2] != null && xitem.c[2].v != null) {
-                  var google = xitem.c[3].v;
-                  //thesrc = 'https://www.grcrane2.com/aahs63_images/' + xitem.c[2].v;
-                  thesrc = 'https://drive.google.com/uc?export=view&id=' + google;
-                }
-              }
+        var thevideo = '';
+        splitimages.forEach(function(item,key) { 
+          var x = imageNumberXRef.indexOf(item);
+          if (x) { 
+            console.log(imageData[x]);
+            var google = imageData[x].c[3].v;
+            var caption =  (imageData[x].c[1] != null) ? imageData[x].c[1].v : '';
+            var filename = (imageData[x].c[2] != null) ? imageData[x].c[2].v : '';
+            filename = filename.toUpperCase();
+            var x2 = filename.indexOf('.MP4');
+            
+            if (x2 > -1) {
+              thevideo = '<div class="classmateVideos">';
+              thevideo = thevideo + '<figure><iframe src="https://drive.google.com/file/d/' +
+              google + '/preview" width="audo" height="audo" allowfullscreen allow="autoplay"></iframe>' + 
+              '<figcaption><b>' + caption + '</b></figcaption></figure></div>';
+            }
+            else {
+              var thesrc = 'https://drive.google.com/uc?export=view&id=' + google;
+              temp = temp + '<a href="' + thesrc + '"><img src="' + thesrc + '"></a>';  
+            }  
+          }
+            temp = temp;
+        })
+        temp = temp+ "</div></div>\n" +
+          "<div style=\"clear:both;\"></div>\n" + thevideo;
 
-            })
-
-          temp = temp + '<a href="' + thesrc + '"><img src="' + thesrc + '"></a>';   
-      
-          })
-
-          temp = temp+ "</div></div>\n" +
-          "<div style=\"clear:both;\"></div>\n";
           jQuery(temp).insertAfter('p.status');
-          showClassmateInfo(); 
-          });
-        }   
-        else {
-          showClassmateInfo(); 
-        }
+        }   // if (theimages)
+        
+        //jQuery('#myModal .classmateTitle').focus();
+
+        
+        console.log('scrollTop=' + document.querySelector("#myModal .modal-content").scrollTop);
+        
+        //modal.style.display = "block";
+        jQuery('#myModal').show();
+        jQuery('main#main').hide();
+        jQuery('html').scrollTop(0);
         delete(memberRows);  // all done with this variable
     })
+
+    /* ----------------------------------------------------------- */
+    /* Set up the buttons                                          */
+    /* ----------------------------------------------------------- */
 
     jQuery('.backButton').on('click', function (event) {
       jQuery('#classmateInfo').hide();
       jQuery('.gallery-container').show();
       jQuery('#locateInfo').hide(); 
-      jQuery(window).scrollTop(position); 
+      
       
     })
 
@@ -412,6 +466,55 @@ function do_classList() {
       do_search(); 
       do_page(); 
     })
+
+    addMyModal(); 
+
+    // Get the modal
+    var modal = document.getElementById("myModal");
+
+    // Get the <span> element that closes the modal
+    var span = document.getElementsByClassName("close")[0];
+    var span2 = document.getElementsByClassName("bottomClose")[0];
+
+    // When the user clicks on <span> (x), close the modal
+    span.onclick = function(e) {
+      e.preventDefault();
+      modal.style.display = "none";
+      jQuery('main#main').show();
+      jQuery(window).scrollTop(windowposition); 
+    }
+    span2.onclick = function(e) {
+      e.preventDefault();
+      modal.style.display = "none";
+      jQuery('main#main').show();
+      jQuery(window).scrollTop(windowposition); 
+    }
+
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function(event) {
+      if (event.target == modal) {
+        modal.style.display = "none";
+        jQuery('main#main').show();
+        jQuery(window).scrollTop(windowposition); 
+      }
+    } 
+
+    var urlid = getSearchParams("id");
+    if (urlid) {
+      jQuery('div.item a').filter('[data-id="' + urlid + '"]').trigger('click');
+    }
+
+    jQuery('#passedList a').on('click', function(event) {
+      event.preventDefault();
+      var urlid = jQuery(this).data('id');
+      jQuery('div.item a').filter('[data-id="' + urlid + '"]').trigger('click');
+
+    });
+
+
+    /* ----------------------------------------------------------- */
+    /* All set now, clear search and show the class list           */
+    /* ----------------------------------------------------------- */
 
     do_search(); 
     var c = jQuery('.item.showme');
