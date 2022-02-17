@@ -204,7 +204,7 @@ function addMyModal (selectorID) {
    </div>`;
    if (myModalID.length == 0) {
     //jQuery('section#primary').append(myModal);
-    jQuery(myModal).insertAfter(selectorID);
+    jQuery(myModal).insertAfter('#classList');
    }
 }
 
