@@ -499,7 +499,7 @@ function do_classList(selectorID = 'body') {
         var thevideo = '';
         splitimages.forEach(function(item,key) { 
           var x = imageNumberXRef.indexOf(item);
-          if (x) { 
+          if (x && typeof imageData[x] != 'undefined') { 
             console.log(imageData[x]);
             var google = imageData[x].c[3].v;
             var caption =  (imageData[x].c[1] != null) ? imageData[x].c[1].v : '';
