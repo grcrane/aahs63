@@ -17,7 +17,7 @@ function formatURL(file_id, sheet, query) {
 
 var image_file_id = '1EDNx6F1ywhoEsnNS2DSSyBkgNphoQEnmccFS3gOZ5PU';
 var image_sheet = 'Allimages';
-var imagequery = "SELECT A, B, C, D";
+var imagequery = "SELECT A, B, C, D, E";
 var imagessurl = formatURL(image_file_id, image_sheet, imagequery);
 jQuery('<div id="markTime"></div>').appendTo("p#found");
 jQuery('<div id="loading"></div>').insertBefore("div.gallery-items");
@@ -367,16 +367,20 @@ function do_classList(selectorID = 'body') {
       //var theprofile = item[10];
       var hasprofile = (item[10]) ? 'Y' : 'N';
       var theimages = item[12]; 
+      var theImageURL = ''; 
 
       var x = imageXRef.indexOf(thesrc.toUpperCase()); 
    
       if (x > -1) {
         google = (imageData[x].c[3] != null) ? imageData[x].c[3].v : null;
+        theImageURL = (imageData[x].c[4] != null) ? imageData[x].c[4].v : null;
+
       }   
 
       if (thesrc) {
         //thesrc = 'https://www.grcrane2.com/aahs63_images/' +thesrc;
         thesrc = 'https://drive.google.com/uc?export=view&id=' + google;
+        thesrc = theImageURL;
       }
       if (thestatus.toLowerCase() == 'passed') {
         if (thepassed.length < 5 || theobit == '') {
@@ -502,6 +506,7 @@ function do_classList(selectorID = 'body') {
           if (x && typeof imageData[x] != 'undefined') { 
             console.log(imageData[x]);
             var google = imageData[x].c[3].v;
+            var theImageURL = (imageData[x].c[4] != null) ? imageData[x].c[4].v : null;
             var caption =  (imageData[x].c[1] != null) ? imageData[x].c[1].v : '';
             var filename = (imageData[x].c[2] != null) ? imageData[x].c[2].v : '';
             filename = filename.toUpperCase();
@@ -514,7 +519,8 @@ function do_classList(selectorID = 'body') {
               '<figcaption><b>' + caption + '</b></figcaption></figure></div>';
             }
             else {
-              var thesrc = 'https://drive.google.com/uc?export=view&id=' + google;
+              //var thesrc = 'https://drive.google.com/uc?export=view&id=' + google;
+              var thesrc = theImageURL;
               temp = temp + '<a href="' + thesrc + '"><img src="' + thesrc + '"></a>';  
             }  
           }
