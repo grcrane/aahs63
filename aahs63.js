@@ -382,7 +382,7 @@ function do_classList(selectorID = 'body') {
         thesrc = 'https://drive.google.com/uc?export=view&id=' + google;
         thesrc = theImageURL;
       }
-      if (thestatus.toLowerCase() == 'passed') {
+      if (thepassed != null && thestatus.toLowerCase() == 'passed') {
         if (thepassed.length < 5 || theobit == '') {
           needinfo = 'yes';
         }
